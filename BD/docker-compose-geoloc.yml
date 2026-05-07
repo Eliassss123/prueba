@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  monitoreo-service:
+    build: .
+    container_name: monitoreo-service-app
+    ports:
+      - "8083:8083"
+
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://db-monitoreo-mysql:3306/monitoreo_db
+      SPRING_DATASOURCE_USERNAME: bombero_user
+      SPRING_DATASOURCE_PASSWORD: password_seguro
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+
+    networks:
+      - monitoreo-net
+
+networks:
+  monitoreo-net:
+    external: true
