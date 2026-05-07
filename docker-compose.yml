@@ -1,0 +1,202 @@
+version: "3.8"
+
+# Copia .env.example a .env y ajusta contraseñas.
+# Stack: Eureka + API Gateway + MySQL (x4) + ms-usuarios + ms-reportes + ms-alertas + geolocalización
+
+services:
+  eureka:
+    build:
+      context: ./eureka-service
+      dockerfile: Dockerfile
+    container_name: eureka
+    ports:
+      - "8761:8761"
+    networks:
+      - firewall-network
+
+  mysql-alerts:
+    image: mysql:8.0
+    container_name: mysql-alerts
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-devroot}
+      MYSQL_DATABASE: alerts_db
+      MYSQL_USER: alerts_user
+      MYSQL_PASSWORD: ${MYSQL_ALERTS_PASSWORD:-alerts_pass}
+    ports:
+      - "3306:3306"
+    volumes:
+      - alerts_data:/var/lib/mysql
+    networks:
+      - firewall-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  mysql-reports:
+    image: mysql:8.0
+    container_name: mysql-reports
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-devroot}
+      MYSQL_DATABASE: reports_db
+      MYSQL_USER: reports_user
+      MYSQL_PASSWORD: ${MYSQL_REPORTS_PASSWORD:-reports_pass}
+    ports:
+      - "3307:3306"
+    volumes:
+      - reports_data:/var/lib/mysql
+    networks:
+      - firewall-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  mysql-geolocation:
+    image: mysql:8.0
+    container_name: mysql-geolocation
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-devroot}
+      MYSQL_DATABASE: geolocation_db
+      MYSQL_USER: geolocation_user
+      MYSQL_PASSWORD: ${MYSQL_GEOLOCATION_PASSWORD:-geo_pass}
+    ports:
+      - "3308:3306"
+    volumes:
+      - geolocation_data:/var/lib/mysql
+    networks:
+      - firewall-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  mysql-usuarios:
+    image: mysql:8.0
+    container_name: mysql-usuarios
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-devroot}
+      MYSQL_DATABASE: usuarios_db
+      MYSQL_USER: usuarios_user
+      MYSQL_PASSWORD: ${MYSQL_USUARIOS_PASSWORD:-usuarios_pass}
+    ports:
+      - "3309:3306"
+    volumes:
+      - usuarios_data:/var/lib/mysql
+    networks:
+      - firewall-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  ms-usuarios:
+    build:
+      context: ./usuarios
+      dockerfile: Dockerfile
+    container_name: ms-usuarios
+    ports:
+      - "8084:8084"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka:8761/eureka/
+      MYSQL_USUARIOS_PASSWORD: ${MYSQL_USUARIOS_PASSWORD:-usuarios_pass}
+    depends_on:
+      eureka:
+        condition: service_started
+      mysql-usuarios:
+        condition: service_healthy
+    networks:
+      - firewall-network
+
+  ms-reportes:
+    build:
+      context: ./reportes
+      dockerfile: Dockerfile
+    container_name: ms-reportes
+    ports:
+      - "8081:8081"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka:8761/eureka/
+      MYSQL_REPORTS_PASSWORD: ${MYSQL_REPORTS_PASSWORD:-reports_pass}
+    depends_on:
+      eureka:
+        condition: service_started
+      mysql-reports:
+        condition: service_healthy
+    networks:
+      - firewall-network
+
+  ms-alertas:
+    build:
+      context: ./alertas
+      dockerfile: Dockerfile
+    container_name: ms-alertas
+    ports:
+      - "8082:8082"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka:8761/eureka/
+      MYSQL_ALERTS_PASSWORD: ${MYSQL_ALERTS_PASSWORD:-alerts_pass}
+      REPORTS_SERVICE_URL: http://ms-reportes:8081/api/reportes/enviar
+    depends_on:
+      eureka:
+        condition: service_started
+      mysql-alerts:
+        condition: service_healthy
+      ms-reportes:
+        condition: service_started
+    networks:
+      - firewall-network
+
+  ms-geolocalizacion:
+    build:
+      context: ./geolocalizacion
+      dockerfile: Dockerfile
+    container_name: ms-geolocalizacion
+    ports:
+      - "8083:8083"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka:8761/eureka/
+      MYSQL_GEOLOCATION_PASSWORD: ${MYSQL_GEOLOCATION_PASSWORD:-geo_pass}
+    depends_on:
+      eureka:
+        condition: service_started
+      mysql-geolocation:
+        condition: service_healthy
+    networks:
+      - firewall-network
+
+  api-gateway:
+    build:
+      context: ./api-gateway
+      dockerfile: Dockerfile
+    container_name: api-gateway
+    ports:
+      - "8080:8080"
+    environment:
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka:8761/eureka/
+    depends_on:
+      - eureka
+      - ms-reportes
+      - ms-alertas
+      - ms-geolocalizacion
+      - ms-usuarios
+    networks:
+      - firewall-network
+
+volumes:
+  alerts_data:
+  reports_data:
+  geolocation_data:
+  usuarios_data:
+
+networks:
+  firewall-network:
+    driver: bridge
