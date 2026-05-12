@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  # 1. Contenedor de la Base de Datos
+  mysql-db:
+    image: mysql:8.0
+    container_name: mysql_reportes
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: db_reportes
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  # 2. Contenedor del Microservicio
+  ms-reportes-app:
+    build: .
+    container_name: app_reportes
+    ports:
+      - "8080:8080"
+    environment:
+      # ¡Aquí le pasamos el nombre del contenedor de la BD!
+      - DB_HOST=mysql-db 
+    depends_on:
+      - mysql-db
+
+# Volumen para que no se borren los datos de MySQL al apagar Docker
+volumes:
+  mysql_data:

@@ -1,0 +1,7 @@
+alerts\integration\dto\ReporteSyncRequest$Usuario.class
+alerts\integration\dto\ReporteSyncRequest$Ubicacion.class
+alerts\integration\dto\ReporteSyncRequest$Usuario$UsuarioBuilder.class
+alerts\integration\dto\ReporteSyncRequest.class
+alerts\config\SwaggerUiRedirectConfig.class
+alerts\integration\dto\ReporteSyncRequest$ReporteSyncRequestBuilder.class
+alerts\integration\dto\ReporteSyncRequest$Ubicacion$UbicacionBuilder.class
