@@ -207,18 +207,6 @@ services:
     networks:
       - firewall-network
 
-  firewall-web:
-    build:
-      context: ./firewall-web
-      dockerfile: Dockerfile
-    container_name: firewall-web
-    ports:
-      - "4200:80"
-    depends_on:
-      api-gateway:
-        condition: service_started
-    networks:
-      - firewall-network
 
 volumes:
   alerts_data:
