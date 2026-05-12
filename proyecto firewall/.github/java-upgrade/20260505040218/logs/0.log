@@ -1,0 +1,141 @@
+2026-05-05T04:02:18.904Z [INFO] ----------------------invoke appmod-list-jdks----------------------
+2026-05-05T04:02:18.906Z [INFO] [Tool.invoke]({name: appmod-list-jdks, modelId: auto, input: {
+  "additionalSearchPaths": [
+    "c:\\Program Files",
+    "c:\\Program Files (x86)",
+    "c:\\Users\\farrp"
+  ],
+  "projectPath": "c:\\Users\\farrp\\OneDrive\\Desktop\\proyecto firewall"
+}}).
+2026-05-05T04:02:18.908Z [INFO] [Tool.invoke] do invoke.
+2026-05-05T04:02:18.951Z [INFO] [Tool.invoke]({result: {
+  "message": "We found following jdks in your system:\n\n1. Java 21.0.10\n   📁 Path: C:\\Program Files\\Java\\jdk-21.0.10\\bin\n   🏷️ Source: others\n\nTotal: 1 JDK installation(s) found"
+}}).
+2026-05-05T04:02:18.952Z [INFO] ----------------------invoked appmod-list-jdks----------------------
+2026-05-05T04:02:19.025Z [INFO] ----------------------invoke appmod-list-mavens----------------------
+2026-05-05T04:02:19.026Z [INFO] [Tool.invoke]({name: appmod-list-mavens, modelId: auto, input: {
+  "includeVersion": true,
+  "projectPath": "c:\\Users\\farrp\\OneDrive\\Desktop\\proyecto firewall"
+}}).
+2026-05-05T04:02:19.026Z [INFO] [Tool.invoke] do invoke.
+2026-05-05T04:02:24.171Z [INFO] [Tool.invoke]({result: {
+  "message": "We found following maven installations in your system:\n\n1. Maven 3.9.14\n   📁 Path: C:\\maven\\apache-maven-3.9.14\\bin\n   🏷️ Source: MAVEN_HOME,PATH\n\nTotal: 1 Maven installation(s) found"
+}}).
+2026-05-05T04:02:24.172Z [INFO] ----------------------invoked appmod-list-mavens----------------------
+2026-05-05T04:02:33.721Z [INFO] ---------------------prepare appmod-report-event----------------------
+2026-05-05T04:02:33.722Z [INFO] [Tool.prepareInvocation]({name: appmod-report-event, input: {
+  "projectPath": "c:\\Users\\farrp\\OneDrive\\Desktop\\proyecto firewall",
+  "event": "precheckCompleted",
+  "phase": "precheck",
+  "status": "succeeded",
+  "details": {
+    "baseJdkVersion": "21",
+    "targetVersion": "Java 21"
+  },
+  "message": "Detected Maven multi-module services already targeting Java 21, the latest LTS as of current environment."
+}}).
+2026-05-05T04:02:33.723Z [INFO] [Tool.prepareInvocation] do prepare invocation.
+2026-05-05T04:02:33.725Z [INFO] [Tool.prepareInvocation]({result: {
+  "invocationMessage": "Report upgrade event"
+}}).
+2026-05-05T04:02:33.725Z [INFO] ----------------------prepared appmod-report-event----------------------
+2026-05-05T04:02:33.761Z [INFO] ----------------------invoke appmod-report-event----------------------
+2026-05-05T04:02:33.761Z [INFO] [Tool.invoke]({name: appmod-report-event, modelId: auto, input: {
+  "projectPath": "c:\\Users\\farrp\\OneDrive\\Desktop\\proyecto firewall",
+  "event": "precheckCompleted",
+  "phase": "precheck",
+  "status": "succeeded",
+  "details": {
+    "baseJdkVersion": "21",
+    "targetVersion": "Java 21"
+  },
+  "message": "Detected Maven multi-module services already targeting Java 21, the latest LTS as of current environment."
+}}).
+2026-05-05T04:02:33.762Z [INFO] [Tool.invoke] do invoke.
+2026-05-05T04:02:33.765Z [INFO] Project c:\Users\farrp\OneDrive\Desktop\proyecto firewall is not a maven project, try to get java version from gradle
+2026-05-05T04:02:33.777Z [INFO] [Tool.invoke]({result: {
+  "message": "Event 'precheckCompleted' reported!\nSession ID: 20260505040218,\nSession Dir: c:\\Users\\farrp\\OneDrive\\Desktop\\proyecto firewall\\.github\\java-upgrade\\20260505040218"
+}}).
+2026-05-05T04:02:33.778Z [INFO] ----------------------invoked appmod-report-event----------------------
+2026-05-05T04:02:33.949Z [INFO] Try to get java version from gradle config files: 
+2026-05-05T04:02:33.950Z [INFO] Try to get java version from gradle properties: undefined
+2026-05-05T04:02:33.951Z [INFO] Project java version: 8
+2026-05-05T04:02:34.158Z [WARN] [ReportEventTool] Full project info unavailable, attempting lightweight fallback: UserError: Failed to detect build tool for the project at c:\Users\farrp\OneDrive\Desktop\proyecto firewall. There are child Maven/Gradle projects detected: "reportes", "geolocalizacion", "eureka-service", "api-gateway", "alertas". Would you like to use one of them instead?
+2026-05-05T04:02:34.164Z [INFO] Project c:\Users\farrp\OneDrive\Desktop\proyecto firewall is not a maven project, try to get java version from gradle
+2026-05-05T04:02:34.231Z [INFO] Try to get java version from gradle config files: 
+2026-05-05T04:02:34.232Z [INFO] Try to get java version from gradle properties: undefined
+2026-05-05T04:02:36.863Z [INFO] ---------------------prepare appmod-report-event----------------------
+2026-05-05T04:02:36.863Z [INFO] [Tool.prepareInvocation]({name: appmod-report-event, input: {
+  "sessionId": "20260505040218",
+  "projectPath": "c:\\Users\\farrp\\OneDrive\\Desktop\\proyecto firewall",
+  "event": "planGenerationStarted",
+  "phase": "plan",
+  "status": "succeeded"
+}}).
+2026-05-05T04:02:36.864Z [INFO] [Tool.prepareInvocation] do prepare invocation.
+2026-05-05T04:02:36.865Z [INFO] [Tool.prepareInvocation]({result: {
+  "invocationMessage": "Report upgrade event"
+}}).
+2026-05-05T04:02:36.867Z [INFO] ----------------------prepared appmod-report-event----------------------
+2026-05-05T04:02:36.907Z [INFO] ----------------------invoke appmod-report-event----------------------
+2026-05-05T04:02:36.909Z [INFO] [Tool.invoke]({name: appmod-report-event, modelId: auto, input: {
+  "sessionId": "20260505040218",
+  "projectPath": "c:\\Users\\farrp\\OneDrive\\Desktop\\proyecto firewall",
+  "event": "planGenerationStarted",
+  "phase": "plan",
+  "status": "succeeded"
+}}).
+2026-05-05T04:02:36.910Z [INFO] [Tool.invoke] do invoke.
+2026-05-05T04:02:36.913Z [INFO] [Tool.invoke]({result: {
+  "message": "Event 'planGenerationStarted' reported!\nSession ID: 20260505040218,\nSession Dir: c:\\Users\\farrp\\OneDrive\\Desktop\\proyecto firewall\\.github\\java-upgrade\\20260505040218"
+}}).
+2026-05-05T04:02:36.913Z [INFO] ----------------------invoked appmod-report-event----------------------
+2026-05-05T04:04:16.020Z [INFO] ---------------------prepare appmod-report-event----------------------
+2026-05-05T04:04:16.021Z [INFO] [Tool.prepareInvocation]({name: appmod-report-event, input: {
+  "sessionId": "20260505040218",
+  "projectPath": "c:\\Users\\farrp\\OneDrive\\Desktop\\proyecto firewall",
+  "event": "planReviewed",
+  "phase": "plan",
+  "status": "succeeded"
+}}).
+2026-05-05T04:04:16.022Z [INFO] [Tool.prepareInvocation] do prepare invocation.
+2026-05-05T04:04:16.023Z [INFO] [Tool.prepareInvocation]({result: {
+  "invocationMessage": "Report upgrade event"
+}}).
+2026-05-05T04:04:16.024Z [INFO] ----------------------prepared appmod-report-event----------------------
+2026-05-05T04:04:16.107Z [INFO] ----------------------invoke appmod-report-event----------------------
+2026-05-05T04:04:16.108Z [INFO] [Tool.invoke]({name: appmod-report-event, modelId: auto, input: {
+  "sessionId": "20260505040218",
+  "projectPath": "c:\\Users\\farrp\\OneDrive\\Desktop\\proyecto firewall",
+  "event": "planReviewed",
+  "phase": "plan",
+  "status": "succeeded"
+}}).
+2026-05-05T04:04:16.109Z [INFO] [Tool.invoke] do invoke.
+2026-05-05T04:04:16.112Z [INFO] [Tool.invoke]({result: {
+  "message": "Event 'planReviewed' reported!\nSession ID: 20260505040218,\nSession Dir: c:\\Users\\farrp\\OneDrive\\Desktop\\proyecto firewall\\.github\\java-upgrade\\20260505040218"
+}}).
+2026-05-05T04:04:16.113Z [INFO] ----------------------invoked appmod-report-event----------------------
+2026-05-05T04:04:20.865Z [INFO] ---------------------prepare appmod-confirm-upgrade-plan----------------------
+2026-05-05T04:04:20.866Z [INFO] [Tool.prepareInvocation]({name: appmod-confirm-upgrade-plan, input: {
+  "sessionId": "20260505040218"
+}}).
+2026-05-05T04:04:20.867Z [INFO] [Tool.prepareInvocation] do prepare invocation.
+2026-05-05T04:04:20.868Z [INFO] [Tool.prepareInvocation]({result: {
+  "invocationMessage": "Review [upgrade plan](file:///c:/Users/farrp/OneDrive/Desktop/proyecto firewall/.github/java-upgrade/20260505040218/plan.md)",
+  "confirmationMessages": {
+    "title": "Plan generated",
+    "message": "Please review the generated plan and make any necessary adjustments before proceeding. You can modify the generated [`plan.md`](file:///c:/Users/farrp/OneDrive/Desktop/proyecto firewall/.github/java-upgrade/20260505040218/plan.md) directly."
+  }
+}}).
+2026-05-05T04:04:20.869Z [INFO] ----------------------prepared appmod-confirm-upgrade-plan----------------------
+2026-05-05T07:39:30.048Z [INFO] ----------------------invoke appmod-confirm-upgrade-plan----------------------
+2026-05-05T07:39:30.049Z [INFO] [Tool.invoke]({name: appmod-confirm-upgrade-plan, modelId: auto, input: {
+  "sessionId": "20260505040218"
+}}).
+2026-05-05T07:39:30.050Z [INFO] [Tool.invoke] do invoke.
+2026-05-05T07:39:30.052Z [INFO] Upgrade plan confirmed successfully.
+2026-05-05T07:39:30.058Z [INFO] [Tool.invoke]({result: {
+  "message": "Generated plan is reviewed and confirmed by the user! the upgrade process will start now and be tracked in markdown file: c:\\Users\\farrp\\OneDrive\\Desktop\\proyecto firewall\\.github\\java-upgrade\\20260505040218\\progress.md."
+}}).
+2026-05-05T07:39:30.059Z [INFO] ----------------------invoked appmod-confirm-upgrade-plan----------------------
