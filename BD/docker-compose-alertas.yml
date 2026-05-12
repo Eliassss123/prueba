@@ -1,0 +1,36 @@
+services:
+  mysql-alertas:
+    image: mysql:8.0
+    container_name: mysql-alertas
+    restart: always
+    environment:
+      MYSQL_DATABASE: firewall_alerta
+      MYSQL_USER: alert_user
+      MYSQL_PASSWORD: alert_pass
+      MYSQL_ROOT_PASSWORD: root123
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_alertas_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot123"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  firewall-alerta:
+    build: .
+    container_name: firewall-alerta
+    restart: always
+    depends_on:
+      mysql-alertas:
+        condition: service_healthy
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      SERVER_PORT: 8082
+      REPORTS_SERVICE_URL: http://host.docker.internal:8081/reports
+    ports:
+      - "8082:8082"
+
+volumes:
+  mysql_alertas_data:
