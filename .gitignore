@@ -1,31 +1,3 @@
-# Maven
-target/
-.m2/
-*.jar
-*.war
-*.ear
-
-# IDE
-.idea/
-.vscode/
-*.swp
-*.swo
-*~
+.git/
 .DS_Store
-
-# Spring Boot
 *.log
-application.properties
-application-*.properties
-
-# Gradle
-.gradle/
-build/
-
-# Node
-node_modules/
-npm-debug.log
-
-# Environment
-.env
-.env.local
