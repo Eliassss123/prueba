@@ -1,0 +1,25 @@
+<mat-card class="!bg-zinc-900/70 !border !border-white/10 !shadow-2xl">
+  <mat-card-header class="!pb-2">
+    <mat-icon mat-card-avatar class="text-orange-400">crisis_alert</mat-icon>
+    <mat-card-title class="!text-zinc-100">Mapa de incidentes</mat-card-title>
+    <mat-card-subtitle class="!text-zinc-500">
+      Pines con pulso = reportes con ubicación (GET reportes)
+    </mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    <div class="flex flex-wrap items-center gap-2 mb-3">
+      <button mat-stroked-button color="accent" type="button" (click)="refresh()">
+        <mat-icon>refresh</mat-icon>
+        Actualizar
+      </button>
+      @if (vm.loading()) {
+        <mat-spinner diameter="22" class="inline-block"></mat-spinner>
+      }
+      @if (vm.error()) {
+        <span class="text-sm text-red-300">{{ vm.error() }}</span>
+      }
+      <span class="text-xs text-zinc-500 ml-auto">{{ vm.list().length }} reportes</span>
+    </div>
+    <div #mapHost class="fw-map-host rounded-xl overflow-hidden border border-white/10"></div>
+  </mat-card-content>
+</mat-card>

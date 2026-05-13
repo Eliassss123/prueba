@@ -1,0 +1,110 @@
+<mat-card class="!bg-zinc-900/70 !border !border-white/10 max-w-xl mx-auto">
+  <mat-card-header>
+    <mat-icon mat-card-avatar class="text-sky-400">my_location</mat-icon>
+    <mat-card-title class="!text-zinc-100">Reporte ciudadano</mat-card-title>
+    <mat-card-subtitle class="!text-zinc-500">
+      Se solicita tu ubicación al entrar (permiso del navegador). El reporte se envía con esas coordenadas GPS.
+    </mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content class="!space-y-5 !pt-4">
+    <div
+      class="rounded-xl border border-white/10 bg-white/5 px-4 py-3 flex flex-col sm:flex-row sm:items-center gap-3"
+    >
+      <div class="flex-1 min-w-0">
+        <p class="text-sm text-zinc-200 font-medium">Ubicación del equipo</p>
+        <p class="text-xs text-zinc-500 mt-0.5">
+          El navegador mostrará el aviso de permisos. En HTTPS o en <code class="text-zinc-400">localhost</code> funciona
+          mejor.
+        </p>
+        @if (geo.status() === 'pending') {
+          <div class="flex items-center gap-2 mt-2 text-orange-200/90 text-sm">
+            <mat-spinner diameter="18" />
+            Obteniendo GPS…
+          </div>
+        }
+        @if (geo.status() === 'ready' && geo.lastFix(); as fix) {
+          <div
+            class="mt-2 inline-flex items-center gap-2 rounded-full border border-emerald-500/40 bg-emerald-950/50 px-3 py-1 text-xs text-emerald-100"
+          >
+            <mat-icon class="!text-base !w-4 !h-4">gps_fixed</mat-icon>
+            Precisión ~{{ fix.accuracyM | number: '1.0-0' }} m
+          </div>
+        }
+        @if (geo.status() === 'error' && geo.error()) {
+          <p class="text-xs text-red-300/90 mt-2">{{ geo.error() }}</p>
+        }
+      </div>
+      <button
+        mat-flat-button
+        color="accent"
+        type="button"
+        class="shrink-0"
+        (click)="solicitarUbicacion(true)"
+        [disabled]="geo.status() === 'pending'"
+      >
+        <mat-icon>refresh</mat-icon>
+        Actualizar GPS
+      </button>
+    </div>
+
+    <mat-form-field appearance="outline" class="w-full" subscriptSizing="dynamic" color="accent">
+      <mat-label>Descripción del incidente</mat-label>
+      <textarea matInput rows="3" [(ngModel)]="descripcion" name="desc" required></textarea>
+    </mat-form-field>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+      <mat-form-field appearance="outline" class="w-full" subscriptSizing="dynamic" color="accent">
+        <mat-label>Latitud</mat-label>
+        <input matInput [(ngModel)]="latitud" name="lat" placeholder="Se rellena con GPS" />
+        <mat-hint>GPS o manual</mat-hint>
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="w-full" subscriptSizing="dynamic" color="accent">
+        <mat-label>Longitud</mat-label>
+        <input matInput [(ngModel)]="longitud" name="lng" placeholder="Se rellena con GPS" />
+      </mat-form-field>
+    </div>
+    <mat-form-field appearance="outline" class="w-full" subscriptSizing="dynamic" color="accent">
+      <mat-label>Referencia (opcional)</mat-label>
+      <input matInput [(ngModel)]="referencia" name="ref" />
+    </mat-form-field>
+    <div
+      class="rounded-xl border border-dashed border-white/15 bg-white/5 px-4 py-6 text-center hover:border-orange-400/40 transition-colors"
+    >
+      <input
+        #fileInp
+        type="file"
+        accept="image/*"
+        class="hidden"
+        (change)="onFile($event)"
+      />
+      <button mat-stroked-button type="button" (click)="fileInp.click()">
+        <mat-icon>upload</mat-icon>
+        Adjuntar imagen (simulado)
+      </button>
+      @if (archivoNombre) {
+        <p class="mt-2 text-xs text-emerald-300/90 truncate">{{ archivoNombre }}</p>
+        <p class="text-[10px] text-zinc-500">Se envía URL de demostración compatible con el backend.</p>
+      }
+    </div>
+    <button
+      mat-flat-button
+      color="primary"
+      type="button"
+      class="w-full fw-btn-shimmer !py-7 !text-lg !font-bold !tracking-wide !bg-gradient-to-r !from-orange-500 !via-amber-500 !to-orange-600 !rounded-xl !shadow-[0_0_30px_rgba(249,115,22,0.35)]"
+      style="margin-top: 1.5rem;"
+      (click)="enviar()"
+      [disabled]="vm.loading() || !descripcion.trim() || geo.status() === 'pending'"
+    >
+      @if (vm.loading()) {
+        <span class="inline-flex items-center gap-2">
+          <mat-icon class="animate-spin">progress_activity</mat-icon>
+          Enviando…
+        </span>
+      } @else {
+        <span class="inline-flex items-center gap-2">
+          <mat-icon>local_fire_department</mat-icon>
+          Enviar reporte con esta ubicación
+        </span>
+      }
+    </button>
+  </mat-card-content>
+</mat-card>

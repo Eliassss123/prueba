@@ -1,0 +1,46 @@
+.fw-nav-active {
+  background: linear-gradient(90deg, rgba(249, 115, 22, 0.15), transparent) !important;
+  border-left: 3px solid #fb923c;
+}
+
+mat-sidenav {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+}
+
+mat-sidenav-content {
+  min-height: 100vh;
+}
+
+/* Ocultar la barra gris debajo del toolbar (progress / bottom border sobrante) */
+::ng-deep mat-toolbar::after {
+  display: none !important;
+}
+
+::ng-deep .mat-mdc-progress-bar {
+  display: none !important;
+}
+
+/* Reporte ciudadano destacado en sidebar — botón más llamativo */
+.fw-nav-report {
+  background: linear-gradient(135deg, rgba(251, 146, 60, 0.18), rgba(249, 115, 22, 0.08)) !important;
+  border-left: 3px solid rgba(251, 146, 60, 0.7) !important;
+  margin: 0.75rem 0.5rem !important;
+  border-radius: 0.75rem !important;
+  transition: background 0.3s ease, box-shadow 0.3s ease;
+}
+
+.fw-nav-report:hover {
+  background: linear-gradient(135deg, rgba(251, 146, 60, 0.28), rgba(249, 115, 22, 0.15)) !important;
+  box-shadow: 0 4px 20px rgba(249, 115, 22, 0.2);
+}
+
+::ng-deep .fw-nav-report .mat-icon {
+  animation: fw-report-pulse 2.5s ease-in-out infinite;
+}
+
+@keyframes fw-report-pulse {
+  0%, 100% { transform: scale(1);   opacity: 0.85; }
+  50%      { transform: scale(1.15); opacity: 1; }
+}

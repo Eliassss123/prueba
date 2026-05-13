@@ -1,0 +1,46 @@
+<mat-sidenav-container class="min-h-screen bg-night-950 text-zinc-100">
+  <mat-sidenav
+    mode="side"
+    [opened]="layout.sidebarOpen()"
+    class="!w-64 !bg-zinc-950/95 !border-r !border-white/10"
+  >
+    <div class="flex flex-col min-h-screen">
+      <div class="p-4 border-b border-white/10">
+        <p class="font-display text-lg font-bold tracking-tight text-orange-200">Firewall</p>
+        <p class="text-xs text-zinc-500 truncate">{{ auth.session()?.nombre || 'Operador' }}</p>
+        <p class="text-[10px] text-zinc-600 font-mono truncate">{{ auth.session()?.rut }}</p>
+      </div>
+      <mat-nav-list class="flex-1">
+        <a mat-list-item routerLink="/app/mapa" routerLinkActive="fw-nav-active" [routerLinkActiveOptions]="{ exact: true }">
+          <mat-icon matListItemIcon>map</mat-icon>
+          <span matListItemTitle>Mapa en vivo</span>
+        </a>
+        <a mat-list-item routerLink="/app/reporte" routerLinkActive="fw-nav-active" class="fw-nav-report">
+          <mat-icon matListItemIcon class="!text-orange-400">add_location_alt</mat-icon>
+          <span matListItemTitle class="!text-orange-100 !font-semibold">Nuevo reporte</span>
+          <span matListItemLine class="!text-[11px] !text-orange-300/60">Crear reporte ciudadano</span>
+        </a>
+      </mat-nav-list>
+      <div class="p-3 border-t border-white/10">
+        <button mat-stroked-button color="warn" class="w-full" type="button" (click)="auth.logout()">
+          <mat-icon>logout</mat-icon>
+          Salir
+        </button>
+      </div>
+    </div>
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+    <mat-toolbar class="!bg-zinc-900/80 !border-b !border-white/10 !backdrop-blur-md" style="box-shadow: none;">
+      <button mat-icon-button type="button" (click)="layout.toggleSidebar()" aria-label="Menú">
+        <mat-icon>{{ layout.sidebarOpen() ? 'menu_open' : 'menu' }}</mat-icon>
+      </button>
+      <span class="font-display font-semibold text-orange-100/90">Panel operador</span>
+      <span class="flex-1"></span>
+      <span class="text-xs text-zinc-500 hidden sm:inline">Proyecto Firewall</span>
+    </mat-toolbar>
+    <div class="p-3 md:p-5 max-w-[1600px] mx-auto">
+      <router-outlet />
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>
