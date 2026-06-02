@@ -1,11 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { AfterViewInit, Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
-import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
-import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { CreateReporteRequest } from '../../models';
@@ -16,17 +12,7 @@ import { ReportesViewModel } from '../../viewmodels/reportes.viewmodel';
 @Component({
   selector: 'fw-reporte-ciudadano',
   standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule,
-    MatCardModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatButtonModule,
-    MatIconModule,
-    MatSnackBarModule,
-    MatProgressSpinnerModule,
-  ],
+  imports: [CommonModule, FormsModule, MatIconModule, MatSnackBarModule, MatProgressSpinnerModule],
   templateUrl: './reporte-ciudadano.component.html',
   styleUrl: './reporte-ciudadano.component.scss',
 })
@@ -46,9 +32,6 @@ export class ReporteCiudadanoComponent implements AfterViewInit {
     queueMicrotask(() => this.solicitarUbicacion(false));
   }
 
-  /**
-   * @param showSnackOnSuccess mensajes solo si el usuario pulsó el botón (evita snack molesto al auto-inicio).
-   */
   solicitarUbicacion(showSnackOnSuccess: boolean): void {
     this.geo.requestCurrentPosition().subscribe({
       next: (fix) => {
@@ -85,9 +68,7 @@ export class ReporteCiudadanoComponent implements AfterViewInit {
     const lat = Number(this.latitud.replace(',', '.'));
     const lng = Number(this.longitud.replace(',', '.'));
     if (!Number.isFinite(lat) || !Number.isFinite(lng)) {
-      this.snack.open('Indica una ubicación válida (usa “Obtener mi ubicación” o escribe lat/lng).', 'OK', {
-        duration: 5000,
-      });
+      this.snack.open('Indica una ubicación válida (usa GPS o escribe lat/lng).', 'OK', { duration: 5000 });
       return;
     }
     const body: CreateReporteRequest = {
@@ -102,7 +83,7 @@ export class ReporteCiudadanoComponent implements AfterViewInit {
     if (this.archivoNombre) {
       body.multimedia = [
         {
-          urlS3: `https://placehold.co/800x600/1c1917/f97316?text=Firewall+simulado`,
+          urlS3: `https://placehold.co/800x600/f8fafc/ea580c?text=Firewall`,
           tipoArchivo: 'image/jpeg',
         },
       ];

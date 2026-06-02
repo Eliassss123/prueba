@@ -1,7 +1,11 @@
 .fw-map-host {
   height: min(70vh, 640px);
   min-height: 320px;
-  background: radial-gradient(circle at 50% 50%, rgba(30, 30, 40, 0.9), #0a0a0f);
+  background: #f4f4f5;
+}
+
+:host ::ng-deep .leaflet-container {
+  background: #f4f4f5;
 }
 
 ::ng-deep .fw-leaflet-pin {

@@ -1,45 +1,115 @@
-<mat-sidenav-container class="min-h-screen bg-night-950 text-zinc-100">
+<mat-sidenav-container class="min-h-screen bg-slate-50 text-slate-900">
   <mat-sidenav
     mode="side"
     [opened]="layout.sidebarOpen()"
-    class="!w-64 !bg-zinc-950/95 !border-r !border-white/10"
+    class="fw-sidebar !w-[280px] !bg-white !shadow-lg !border-r !border-slate-100"
   >
-    <div class="flex flex-col min-h-screen">
-      <div class="p-4 border-b border-white/10">
-        <p class="font-display text-lg font-bold tracking-tight text-orange-200">Firewall</p>
-        <p class="text-xs text-zinc-500 truncate">{{ auth.session()?.nombre || 'Operador' }}</p>
-        <p class="text-[10px] text-zinc-600 font-mono truncate">{{ auth.session()?.rut }}</p>
+    <div class="flex flex-col h-full">
+      <!-- Usuario -->
+      <div class="p-5 bg-gradient-to-br from-slate-50 to-orange-50/40 border-b border-slate-100">
+        <div class="flex items-center gap-3">
+          <span
+            class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-orange-600 text-white font-semibold text-sm"
+            aria-hidden="true"
+          >
+            {{ userInitials() }}
+          </span>
+          <div class="min-w-0">
+            <p class="font-display font-bold text-slate-900 truncate">{{ auth.session()?.nombre || 'Operador' }}</p>
+            <p class="text-xs text-slate-500 font-mono truncate">{{ auth.session()?.rut }}</p>
+          </div>
+        </div>
       </div>
-      <mat-nav-list class="flex-1">
-        <a mat-list-item routerLink="/app/mapa" routerLinkActive="fw-nav-active" [routerLinkActiveOptions]="{ exact: true }">
-          <mat-icon matListItemIcon>map</mat-icon>
-          <span matListItemTitle>Mapa en vivo</span>
+
+      <nav class="flex-1 overflow-y-auto px-3 py-4 space-y-6" aria-label="Menú principal">
+        <!-- Inicio -->
+        <div>
+          <p class="px-3 mb-2 text-[10px] font-semibold uppercase tracking-wider text-slate-400">Principal</p>
+          <a
+            routerLink="/app/inicio"
+            routerLinkActive="fw-nav-link-active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            class="fw-nav-link"
+          >
+            <span class="fw-nav-icon"><mat-icon>home</mat-icon></span>
+            <span class="fw-nav-text">
+              <span class="fw-nav-title">Inicio</span>
+              <span class="fw-nav-desc">Resumen y accesos rápidos</span>
+            </span>
+          </a>
+        </div>
+
+        <!-- Operaciones -->
+        <div>
+          <p class="px-3 mb-2 text-[10px] font-semibold uppercase tracking-wider text-slate-400">Operaciones</p>
+          <ul class="space-y-1">
+            <li>
+              <a routerLink="/app/mapa" routerLinkActive="fw-nav-link-active" class="fw-nav-link">
+                <span class="fw-nav-icon"><mat-icon>map</mat-icon></span>
+                <span class="fw-nav-text">
+                  <span class="fw-nav-title">Reportes y emergencias</span>
+                  <span class="fw-nav-desc">Mapa de focos activos</span>
+                </span>
+              </a>
+            </li>
+            <li>
+              <a routerLink="/app/suministros" routerLinkActive="fw-nav-link-active" class="fw-nav-link">
+                <span class="fw-nav-icon"><mat-icon>medical_services</mat-icon></span>
+                <span class="fw-nav-text">
+                  <span class="fw-nav-title">Suministros médicos</span>
+                  <span class="fw-nav-desc">Inventario y stock crítico</span>
+                </span>
+              </a>
+            </li>
+            <li>
+              <a routerLink="/app/alertas" routerLinkActive="fw-nav-link-active" class="fw-nav-link">
+                <span class="fw-nav-icon"><mat-icon>notifications_active</mat-icon></span>
+                <span class="fw-nav-text">
+                  <span class="fw-nav-title">Alertas críticas</span>
+                  <span class="fw-nav-desc">Reglas y notificaciones</span>
+                </span>
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Cuenta -->
+        <div>
+          <p class="px-3 mb-2 text-[10px] font-semibold uppercase tracking-wider text-slate-400">Cuenta</p>
+          <a routerLink="/app/perfil" routerLinkActive="fw-nav-link-active" class="fw-nav-link">
+            <span class="fw-nav-icon"><mat-icon>person</mat-icon></span>
+            <span class="fw-nav-text">
+              <span class="fw-nav-title">Mi perfil</span>
+              <span class="fw-nav-desc">Datos y contraseña</span>
+            </span>
+          </a>
+        </div>
+      </nav>
+
+      <!-- CTA + salir -->
+      <div class="p-4 border-t border-slate-100 space-y-2 mt-auto">
+        <a routerLink="/app/reporte" class="fw-nav-cta">
+          <mat-icon>add_location_alt</mat-icon>
+          <span>Nuevo reporte</span>
         </a>
-        <a mat-list-item routerLink="/app/reporte" routerLinkActive="fw-nav-active" class="fw-nav-report">
-          <mat-icon matListItemIcon class="!text-orange-400">add_location_alt</mat-icon>
-          <span matListItemTitle class="!text-orange-100 !font-semibold">Nuevo reporte</span>
-          <span matListItemLine class="!text-[11px] !text-orange-300/60">Crear reporte ciudadano</span>
-        </a>
-      </mat-nav-list>
-      <div class="p-3 border-t border-white/10">
-        <button mat-stroked-button color="warn" class="w-full" type="button" (click)="auth.logout()">
-          <mat-icon>logout</mat-icon>
-          Salir
+        <button type="button" class="fw-btn-logout w-full" (click)="auth.logout()">
+          <mat-icon class="!text-lg">logout</mat-icon>
+          Cerrar sesión
         </button>
       </div>
     </div>
   </mat-sidenav>
 
-  <mat-sidenav-content>
-    <mat-toolbar class="!bg-zinc-900/80 !border-b !border-white/10 !backdrop-blur-md" style="box-shadow: none;">
-      <button mat-icon-button type="button" (click)="layout.toggleSidebar()" aria-label="Menú">
+  <mat-sidenav-content class="bg-slate-50">
+    <mat-toolbar class="!bg-white !border-b !border-slate-100 !shadow-sm !text-slate-900">
+      <button mat-icon-button type="button" (click)="layout.toggleSidebar()" aria-label="Menú" class="!text-slate-600">
         <mat-icon>{{ layout.sidebarOpen() ? 'menu_open' : 'menu' }}</mat-icon>
       </button>
-      <span class="font-display font-semibold text-orange-100/90">Panel operador</span>
+      <span class="font-display font-semibold text-slate-800">{{ pageTitle() }}</span>
       <span class="flex-1"></span>
-      <span class="text-xs text-zinc-500 hidden sm:inline">Proyecto Firewall</span>
+      <span class="text-xs text-slate-400 hidden sm:inline">Proyecto Firewall</span>
     </mat-toolbar>
-    <div class="p-3 md:p-5 max-w-[1600px] mx-auto">
+    <div class="p-4 md:p-6 max-w-[1600px] mx-auto">
       <router-outlet />
     </div>
   </mat-sidenav-content>

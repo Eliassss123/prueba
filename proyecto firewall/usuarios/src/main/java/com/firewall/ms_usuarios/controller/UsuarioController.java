@@ -1,5 +1,6 @@
 package com.firewall.ms_usuarios.controller;
 
+import com.firewall.ms_usuarios.dto.request.ChangePasswordRequestDTO;
 import com.firewall.ms_usuarios.dto.request.LoginRequestDTO;
 import com.firewall.ms_usuarios.dto.request.RegisterRequestDTO;
 import com.firewall.ms_usuarios.dto.response.LoginResponseDTO;
@@ -35,11 +36,25 @@ public class UsuarioController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
+    @PostMapping("/forgot-password")
+    public ResponseEntity<Map<String, String>> forgotPassword(@RequestParam String email) {
+        usuarioService.recoverPasswordByEmail(email);
+        return ResponseEntity.ok(Collections.singletonMap(
+                "message",
+                "Si el correo está registrado, recibirá en breve una contraseña provisional."));
+    }
+
     @PostMapping("/login")
     public ResponseEntity<LoginResponseDTO> login(@Valid @RequestBody LoginRequestDTO request) {
         Usuario usuario = usuarioService.login(request);
         LoginResponseDTO response = new LoginResponseDTO(usuario.getRut(), usuario.getNombre(), true, "Login exitoso");
         return ResponseEntity.ok(response);
+    }
+
+    @PutMapping("/change-password")
+    public ResponseEntity<Map<String, String>> changePassword(@Valid @RequestBody ChangePasswordRequestDTO request) {
+        usuarioService.changePassword(request);
+        return ResponseEntity.ok(Collections.singletonMap("message", "Contraseña actualizada correctamente"));
     }
 
     @GetMapping("/{rut}")
@@ -65,5 +80,11 @@ public class UsuarioController {
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<Map<String, String>> handleBadRequest(IllegalArgumentException ex) {
         return ResponseEntity.badRequest().body(Collections.singletonMap("message", ex.getMessage()));
+    }
+
+    @ExceptionHandler(IllegalStateException.class)
+    public ResponseEntity<Map<String, String>> handleIllegalState(IllegalStateException ex) {
+        return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
+                .body(Collections.singletonMap("message", ex.getMessage()));
     }
 }

@@ -30,3 +30,14 @@ export interface Session {
   rut: string;
   nombre: string;
 }
+
+export interface ChangePasswordRequest {
+  rut: string;
+  currentPassword: string;
+  newPassword: string;
+  confirmNewPassword: string;
+}
+
+export interface MessageResponse {
+  message: string;
+}

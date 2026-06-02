@@ -3,9 +3,7 @@
 @tailwind utilities;
 
 :root {
-  --fw-glass-bg: rgba(12, 14, 22, 0.45);
-  --fw-glass-border: rgba(255, 140, 66, 0.35);
-  --fw-glow: rgba(251, 113, 133, 0.4);
+  --fw-brand: #ea580c;
 }
 
 html,
@@ -15,175 +13,38 @@ body {
 
 body {
   margin: 0;
-  @apply bg-night-950 text-zinc-100 font-sans;
+  @apply bg-slate-50 text-slate-900 font-sans antialiased;
 }
 
-/* --- Aurora + ember mesh (landing) --- */
-.fw-bg-stage {
-  position: fixed;
-  inset: 0;
-  overflow: hidden;
-  background: radial-gradient(ellipse 120% 80% at 50% 100%, #2a0a02 0%, #0a0a0f 45%, #030308 100%);
-  z-index: -2;
-}
+@layer components {
+  .fw-label {
+    @apply block text-sm font-medium text-slate-700 mb-1.5;
+  }
 
-.fw-aurora {
-  position: absolute;
-  inset: -20%;
-  background: conic-gradient(
-    from 120deg at 50% 50%,
-    rgba(255, 77, 0, 0.25),
-    rgba(147, 51, 234, 0.2),
-    rgba(56, 189, 248, 0.18),
-    rgba(255, 77, 0, 0.22)
-  );
-  filter: blur(80px);
-  animation: fw-aurora-spin 28s linear infinite;
-  opacity: 0.85;
-}
+  .fw-input {
+    @apply w-full px-4 py-2 border border-slate-300 rounded-lg bg-white text-slate-900 text-sm
+      placeholder:text-slate-400
+      focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-colors;
+  }
 
-@keyframes fw-aurora-spin {
-  to {
-    transform: rotate(360deg);
+  .fw-btn-primary {
+    @apply inline-flex items-center justify-center px-4 py-2.5 rounded-lg bg-orange-600 text-white text-sm font-semibold
+      hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2
+      disabled:opacity-60 disabled:pointer-events-none transition-colors;
+  }
+
+  .fw-btn-secondary {
+    @apply inline-flex items-center justify-center px-4 py-2.5 rounded-lg border border-slate-300 bg-white text-slate-700 text-sm font-medium
+      hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-slate-300 focus:ring-offset-2
+      disabled:opacity-60 transition-colors;
+  }
+
+  .fw-card-interactive {
+    @apply block bg-white rounded-xl shadow-md p-5 border border-slate-100 hover:shadow-lg hover:border-orange-200 transition-all;
   }
 }
 
-.fw-ember-field {
-  position: absolute;
-  inset: 0;
-  background-image: radial-gradient(circle at 20% 80%, rgba(255, 100, 0, 0.12) 0%, transparent 40%),
-    radial-gradient(circle at 80% 30%, rgba(255, 60, 0, 0.1) 0%, transparent 35%);
-  animation: fw-ember-rise 14s ease-in-out infinite;
-}
-
-@keyframes fw-ember-rise {
-  0%,
-  100% {
-    opacity: 0.6;
-    transform: translateY(0);
-  }
-  50% {
-    opacity: 1;
-    transform: translateY(-20px);
-  }
-}
-
-/* --- Node network (SVG overlay) --- */
-.fw-node-web {
-  position: absolute;
-  inset: 0;
-  opacity: 0.55;
-  mix-blend-mode: screen;
-}
-
-.fw-node-web line {
-  stroke: rgba(255, 160, 90, 0.15);
-  stroke-width: 0.6;
-  animation: fw-line-pulse 4s ease-in-out infinite;
-}
-
-.fw-node-web circle {
-  fill: rgba(255, 200, 120, 0.35);
-  animation: fw-node-glow 3s ease-in-out infinite;
-}
-
-@keyframes fw-line-pulse {
-  0%,
-  100% {
-    stroke-opacity: 0.2;
-  }
-  50% {
-    stroke-opacity: 0.55;
-  }
-}
-
-@keyframes fw-node-glow {
-  0%,
-  100% {
-    r: 1.8;
-    fill-opacity: 0.35;
-  }
-  50% {
-    r: 2.4;
-    fill-opacity: 0.9;
-  }
-}
-
-/* --- Rising sparks (CSS only) --- */
-.fw-sparks {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background-image: radial-gradient(2px 2px at 20% 90%, rgba(255, 200, 100, 0.9), transparent),
-    radial-gradient(2px 2px at 40% 95%, rgba(255, 120, 60, 0.8), transparent),
-    radial-gradient(1.5px 1.5px at 65% 92%, rgba(255, 220, 150, 0.85), transparent),
-    radial-gradient(2px 2px at 85% 88%, rgba(255, 100, 40, 0.75), transparent);
-  background-size: 100% 100%;
-  animation: fw-sparks-float 8s ease-in-out infinite alternate;
-  opacity: 0.5;
-}
-
-@keyframes fw-sparks-float {
-  from {
-    transform: translateY(6px) scale(1);
-  }
-  to {
-    transform: translateY(-30px) scale(1.03);
-  }
-}
-
-/* --- Glass panel --- */
-.fw-glass-panel {
-  background: var(--fw-glass-bg);
-  backdrop-filter: blur(18px) saturate(160%);
-  -webkit-backdrop-filter: blur(18px) saturate(160%);
-  border: 1px solid var(--fw-glass-border);
-  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.06) inset, 0 25px 80px rgba(0, 0, 0, 0.55),
-    0 0 60px rgba(255, 90, 0, 0.08);
-  border-radius: 1.25rem;
-}
-
-/* --- Shimmer CTA --- */
-.fw-btn-shimmer {
-  position: relative;
-  overflow: hidden;
-  isolation: isolate;
-  transition: transform 0.2s ease, box-shadow 0.25s ease;
-}
-
-.fw-btn-shimmer::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    105deg,
-    transparent 0%,
-    transparent 40%,
-    rgba(255, 255, 255, 0.35) 50%,
-    transparent 60%,
-    transparent 100%
-  );
-  transform: translateX(-100%);
-  animation: fw-shimmer 2.8s ease-in-out infinite;
-  z-index: 1;
-  pointer-events: none;
-}
-
-@keyframes fw-shimmer {
-  0% {
-    transform: translateX(-120%);
-  }
-  100% {
-    transform: translateX(120%);
-  }
-}
-
-.fw-btn-shimmer:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 12px 40px rgba(234, 88, 12, 0.35);
-}
-
-/* --- Map: pulsing “fire” pins --- */
+/* Map: pulsing pins */
 .fw-map-pin-pulse {
   width: 14px;
   height: 14px;
@@ -207,76 +68,22 @@ body {
 
 .leaflet-container {
   font-family: inherit;
+  background: #f4f4f5;
 }
 
-/* Material tweaks in glass context — spacing is handled per-component */
+.leaflet-tile-pane {
+  filter: none;
+}
 
-/* --- Fix: eliminar barra gris debajo del toolbar (mat-toolbar shadow/line) --- */
+::ng-deep .fw-leaflet-pin {
+  background: transparent !important;
+  border: none !important;
+}
+
 .mat-toolbar {
   box-shadow: none !important;
 }
 
 .mat-toolbar::after {
   display: none !important;
-}
-
-/* --- Fix: eliminar progress bar sobrante (si existe) --- */
-mat-sidenav-content > .mat-mdc-progress-bar,
-mat-toolbar + .mat-mdc-progress-bar {
-  display: none !important;
-}
-
-/* --- Fix: asegurar que los form-field outline sean visibles en fondo oscuro --- */
-.mat-mdc-form-field .mdc-notched-outline__leading,
-.mat-mdc-form-field .mdc-notched-outline__notch,
-.mat-mdc-form-field .mdc-notched-outline__trailing {
-  border-color: rgba(255, 255, 255, 0.18) !important;
-}
-
-.mat-mdc-form-field.mat-focused .mdc-notched-outline__leading,
-.mat-mdc-form-field.mat-focused .mdc-notched-outline__notch,
-.mat-mdc-form-field.mat-focused .mdc-notched-outline__trailing {
-  border-color: rgba(251, 146, 60, 0.65) !important;
-}
-
-/* --- Fix: campos de texto más grandes con labels dentro del campo --- */
-.mat-mdc-form-field .mat-mdc-text-field-wrapper {
-  padding: 16px 14px !important;
-}
-
-.mat-mdc-form-field .mat-mdc-text-field-wrapper .mat-mdc-form-field-infix {
-  min-height: 48px !important;
-  padding-top: 20px !important;
-  padding-bottom: 4px !important;
-}
-
-/* Input/textarea más grandes y legibles */
-.mat-mdc-form-field .mat-mdc-input-element {
-  font-size: 15px !important;
-  color: #e4e4e7 !important;
-}
-
-/* Label flotante con fondo oscuro para que no corte el borde */
-.mat-mdc-form-field .mdc-floating-label {
-  color: rgba(228, 228, 231, 0.7) !important;
-  font-size: 15px !important;
-}
-
-.mat-mdc-form-field.mat-focused .mdc-floating-label,
-.mat-mdc-form-field .mdc-floating-label--float-above {
-  color: #fdba74 !important;
-  background: linear-gradient(to bottom, transparent 40%, rgba(24, 24, 27, 0.95) 40%) !important;
-  padding: 0 6px !important;
-  margin-left: -4px !important;
-}
-
-/* Iconos suffix (candado, badge) color visible */
-.mat-mdc-form-field .mat-mdc-form-field-icon-suffix .mat-icon {
-  color: rgba(228, 228, 231, 0.5) !important;
-}
-
-/* Hint text legible */
-.mat-mdc-form-field .mat-mdc-form-field-hint {
-  color: rgba(161, 161, 170, 0.7) !important;
-  font-size: 12px !important;
 }

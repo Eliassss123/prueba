@@ -47,6 +47,8 @@ public class ApiGatewayApplication {
 				.uri("http://ms-geolocalizacion:8083"))
 			.route("ms_usuarios_api", r -> r.path("/api/usuarios/**")
 				.uri("http://ms-usuarios:8084"))
+			.route("ms_usuarios_auth", r -> r.path("/auth/**")
+				.uri("http://ms-usuarios:8084"))
 			.route("ms_reportes_api", r -> r.path("/api/reports/**")
 				.filters(f -> f.rewritePath("^/api/reports/(?<segment>.*)", "/api/reportes/${segment}"))
 				.uri("http://ms-reportes:8081"))

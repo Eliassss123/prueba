@@ -1,0 +1,53 @@
+<div class="space-y-6">
+  <div>
+    <h1 class="text-2xl font-display font-bold text-slate-900">
+      Bienvenido, {{ auth.session()?.nombre || 'Operador' }}
+    </h1>
+    <p class="text-slate-600 mt-1 text-sm">
+      Panel de control institucional — seleccione una opción del menú o use los accesos directos.
+    </p>
+  </div>
+
+  <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
+    <a
+      routerLink="/app/mapa"
+      class="fw-card-interactive group"
+    >
+      <mat-icon class="text-orange-500 mb-3">crisis_alert</mat-icon>
+      <h2 class="font-semibold text-slate-900 group-hover:text-orange-600 transition-colors">
+        Gestión de Reportes y Emergencias
+      </h2>
+      <p class="text-sm text-slate-600 mt-1">Ver focos activos en el mapa y actualizar incidentes.</p>
+    </a>
+
+    <a routerLink="/app/suministros" class="fw-card-interactive group">
+      <mat-icon class="text-orange-500 mb-3">medical_services</mat-icon>
+      <h2 class="font-semibold text-slate-900 group-hover:text-orange-600 transition-colors">
+        Monitoreo de Suministros Médicos
+      </h2>
+      <p class="text-sm text-slate-600 mt-1">Estado de inventario y disponibilidad crítica.</p>
+    </a>
+
+    <a routerLink="/app/alertas" class="fw-card-interactive group">
+      <mat-icon class="text-orange-500 mb-3">notifications_active</mat-icon>
+      <h2 class="font-semibold text-slate-900 group-hover:text-orange-600 transition-colors">
+        Configuración de Alertas Críticas
+      </h2>
+      <p class="text-sm text-slate-600 mt-1">Umbrales, canales y reglas de notificación.</p>
+    </a>
+
+    <a routerLink="/app/perfil" class="fw-card-interactive group">
+      <mat-icon class="text-orange-500 mb-3">person</mat-icon>
+      <h2 class="font-semibold text-slate-900 group-hover:text-orange-600 transition-colors">
+        Mi Perfil de Usuario
+      </h2>
+      <p class="text-sm text-slate-600 mt-1">Datos de cuenta y seguridad de acceso.</p>
+    </a>
+
+    <a routerLink="/app/reporte" class="fw-card-interactive group border-orange-200 bg-orange-50/50">
+      <mat-icon class="text-orange-600 mb-3">add_location_alt</mat-icon>
+      <h2 class="font-semibold text-orange-700">Nuevo reporte ciudadano</h2>
+      <p class="text-sm text-slate-600 mt-1">Registrar incidente con geolocalización GPS.</p>
+    </a>
+  </div>
+</div>

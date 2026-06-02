@@ -1,0 +1,84 @@
+<div class="max-w-xl space-y-6">
+  <div class="bg-white rounded-xl shadow-md p-6">
+    <h1 class="text-xl font-display font-bold text-slate-900">Mi perfil</h1>
+    <p class="text-sm text-slate-600 mt-1">Información de su sesión activa.</p>
+    <dl class="mt-4 space-y-3 text-sm">
+      <div class="flex justify-between border-b border-slate-100 pb-2">
+        <dt class="text-slate-500">Nombre</dt>
+        <dd class="font-medium text-slate-900">{{ auth.session()?.nombre || '—' }}</dd>
+      </div>
+      <div class="flex justify-between border-b border-slate-100 pb-2">
+        <dt class="text-slate-500">RUT</dt>
+        <dd class="font-mono text-slate-900">{{ auth.session()?.rut }}</dd>
+      </div>
+    </dl>
+  </div>
+
+  <div class="bg-white rounded-xl shadow-md p-6">
+    <div class="flex items-center justify-between gap-3">
+      <div>
+        <h2 class="font-semibold text-slate-900">Cambiar contraseña actual</h2>
+        <p class="text-sm text-slate-600 mt-0.5">Actualice su clave de acceso de forma segura.</p>
+      </div>
+      <button type="button" class="fw-btn-secondary text-sm" (click)="togglePasswordForm()">
+        {{ showPasswordForm() ? 'Ocultar' : 'Mostrar' }}
+      </button>
+    </div>
+
+    @if (showPasswordForm()) {
+      <form class="mt-5 space-y-4" (ngSubmit)="submitChangePassword()">
+        <div>
+          <label class="fw-label" for="currentPassword">Contraseña actual</label>
+          <input
+            id="currentPassword"
+            type="password"
+            class="fw-input"
+            [(ngModel)]="currentPassword"
+            name="currentPassword"
+            required
+            autocomplete="current-password"
+          />
+        </div>
+        <div>
+          <label class="fw-label" for="newPassword">Nueva contraseña</label>
+          <input
+            id="newPassword"
+            type="password"
+            class="fw-input"
+            [(ngModel)]="newPassword"
+            name="newPassword"
+            required
+            minlength="6"
+            autocomplete="new-password"
+          />
+        </div>
+        <div>
+          <label class="fw-label" for="confirmPassword">Confirmar nueva contraseña</label>
+          <input
+            id="confirmPassword"
+            type="password"
+            class="fw-input"
+            [(ngModel)]="confirmPassword"
+            name="confirmPassword"
+            required
+            minlength="6"
+            autocomplete="new-password"
+          />
+        </div>
+        @if (passwordError()) {
+          <p class="text-sm text-red-600" role="alert">{{ passwordError() }}</p>
+        }
+        @if (passwordMessage()) {
+          <p class="text-sm text-emerald-700" role="status">{{ passwordMessage() }}</p>
+        }
+        <button type="submit" class="fw-btn-primary w-full sm:w-auto" [disabled]="auth.loading()">
+          @if (auth.loading()) {
+            <mat-spinner diameter="20" class="inline-block" />
+          } @else {
+            Guardar nueva contraseña
+          }
+        </button>
+      </form>
+    }
+  </div>
+</div>

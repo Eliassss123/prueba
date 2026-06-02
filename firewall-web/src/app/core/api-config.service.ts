@@ -46,4 +46,9 @@ export class ApiConfigService {
   reportesListUrl(): string {
     return this.reportesBase;
   }
+
+  /** Recuperación de contraseña (misma ruta que login, vía `/api/usuarios/**` del gateway). */
+  forgotPasswordUrl(): string {
+    return `${this.usuariosBase}/forgot-password`;
+  }
 }

@@ -1,161 +1,174 @@
-<div class="fw-bg-stage" aria-hidden="true">
-  <div class="fw-aurora"></div>
-  <div class="fw-ember-field"></div>
-  <div class="fw-sparks" [style.filter]="'hue-rotate(' + sparkSeed() + 'deg)'"></div>
-  <svg class="fw-node-web" viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice">
-    <defs>
-      <linearGradient id="fwLine" x1="0%" y1="0%" x2="100%" y2="0%">
-        <stop offset="0%" style="stop-color: rgba(255, 160, 80, 0)" />
-        <stop offset="50%" style="stop-color: rgba(255, 140, 60, 0.45)" />
-        <stop offset="100%" style="stop-color: rgba(255, 200, 120, 0)" />
-      </linearGradient>
-    </defs>
-    <g stroke="url(#fwLine)">
-      <line x1="120" y1="520" x2="340" y2="380" />
-      <line x1="340" y1="380" x2="560" y2="440" />
-      <line x1="560" y1="440" x2="720" y2="280" />
-      <line x1="720" y1="280" x2="980" y2="360" />
-      <line x1="200" y1="260" x2="420" y2="320" />
-      <line x1="420" y1="320" x2="640" y2="200" />
-      <line x1="640" y1="200" x2="900" y2="240" />
-      <line x1="80" y1="640" x2="260" y2="560" />
-      <line x1="900" y1="520" x2="1080" y2="420" />
-    </g>
-    <g fill="rgba(255,200,160,0.9)">
-      <circle cx="120" cy="520" r="3" />
-      <circle cx="340" cy="380" r="3" />
-      <circle cx="560" cy="440" r="3" />
-      <circle cx="720" cy="280" r="3" />
-      <circle cx="980" cy="360" r="3" />
-      <circle cx="200" cy="260" r="2.5" />
-      <circle cx="420" cy="320" r="2.5" />
-      <circle cx="640" cy="200" r="2.5" />
-      <circle cx="900" cy="240" r="2.5" />
-      <circle cx="80" cy="640" r="2" />
-      <circle cx="1080" cy="420" r="2" />
-    </g>
-  </svg>
-</div>
-
-<main
-  class="relative z-10 min-h-screen flex flex-col items-center justify-center px-4 py-16 md:py-10"
->
-  <header class="mb-10 text-center max-w-3xl">
-    <p
-      class="text-xs uppercase tracking-[0.35em] text-orange-300/80 mb-3 font-semibold"
-    >
-      Red de respuesta · Chile
-    </p>
-    <h1 class="font-display text-4xl md:text-6xl font-extrabold leading-tight text-white drop-shadow-[0_0_40px_rgba(255,90,0,0.25)]">
-      Proyecto
-      <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-orange-400 to-rose-400">
-        Firewall
-      </span>
-    </h1>
-    <p class="mt-4 text-zinc-400 text-sm md:text-base max-w-xl mx-auto">
-      Operaciones unificadas: ciudadanía, mapa en vivo y reportes conectados a tu API Spring.
+<main class="min-h-screen bg-slate-50 flex flex-col items-center justify-center px-4 py-12">
+  <header class="mb-8 text-center max-w-lg">
+    <p class="text-xs uppercase tracking-widest text-orange-500 font-semibold mb-2">Red de respuesta · Chile</p>
+    <h1 class="font-display text-3xl md:text-4xl font-bold text-slate-900">Proyecto Firewall</h1>
+    <p class="mt-3 text-slate-600 text-sm md:text-base">
+      Plataforma institucional de emergencias, reportes y monitoreo operativo.
     </p>
   </header>
 
-  <section
-    class="fw-glass-panel w-full max-w-md p-6 md:p-8 transition-transform duration-200 ease-out"
-    [ngStyle]="{
-      transform: 'perspective(900px) rotateX(' + tilt().x + 'deg) rotateY(' + tilt().y + 'deg)'
-    }"
-  >
+  <section class="w-full max-w-md bg-white rounded-xl shadow-md p-6 md:p-8">
     <div class="flex items-center gap-3 mb-6">
       <span
-        class="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-orange-500/30 to-rose-600/20 border border-white/10"
+        class="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-orange-50 text-orange-600"
       >
-        <mat-icon class="text-orange-200 !w-7 !h-7 !text-[1.75rem]">local_fire_department</mat-icon>
+        <mat-icon>local_fire_department</mat-icon>
       </span>
       <div>
-        <h2 class="font-display text-xl font-bold text-white">Acceso operadores</h2>
-        <p class="text-xs text-zinc-500">RUT + contraseña (ms-usuarios)</p>
+        <h2 class="font-display text-lg font-bold text-slate-900">Acceso operadores</h2>
+        <p class="text-xs text-slate-500">RUT y contraseña institucional</p>
       </div>
     </div>
 
     @if (auth.error()) {
-      <div
-        class="mb-4 flex items-start gap-2 rounded-xl border border-red-500/30 bg-red-950/40 px-3 py-2 text-sm text-red-100"
-        role="alert"
-      >
-        <mat-icon class="shrink-0 !text-lg">error_outline</mat-icon>
-        <span>{{ auth.error() }}</span>
+      <div class="mb-4 rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700" role="alert">
+        {{ auth.error() }}
+      </div>
+    }
+    @if (recoveryMessage()) {
+      <div class="mb-4 rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm text-emerald-800" role="status">
+        {{ recoveryMessage() }}
       </div>
     }
 
-    <mat-tab-group mat-stretch-tabs="false" animationDuration="200ms" class="fw-landing-tabs">
-      <mat-tab label="Ingresar">
-        <form class="mt-5 space-y-4" (ngSubmit)="submitLogin()">
-          <mat-form-field appearance="outline" class="w-full" subscriptSizing="dynamic" color="accent">
-            <mat-label>RUT</mat-label>
-            <input matInput name="rut" [(ngModel)]="rut" autocomplete="username" required />
-            <mat-icon matSuffix>badge</mat-icon>
-          </mat-form-field>
-          <mat-form-field appearance="outline" class="w-full" subscriptSizing="dynamic" color="accent">
-            <mat-label>Contraseña</mat-label>
+    @if (showForgotPassword()) {
+      <form class="space-y-4" (ngSubmit)="submitForgotPassword()">
+        <p class="text-sm text-slate-600">
+          Ingrese su correo registrado. Recibirá una contraseña provisional si la cuenta existe.
+        </p>
+        <div>
+          <label class="fw-label" for="forgotEmail">Correo electrónico</label>
+          <input
+            id="forgotEmail"
+            type="email"
+            class="fw-input"
+            [(ngModel)]="forgotEmail"
+            name="forgotEmail"
+            required
+            autocomplete="email"
+          />
+        </div>
+        <button type="submit" class="fw-btn-primary w-full" [disabled]="auth.loading()">
+          Enviar nueva contraseña
+        </button>
+        <button type="button" class="fw-btn-secondary w-full" (click)="closeForgotPassword()">Volver al ingreso</button>
+      </form>
+    } @else {
+      <div class="flex border-b border-slate-200 mb-5">
+        <button
+          type="button"
+          class="flex-1 pb-3 text-sm font-medium transition-colors"
+          [class.text-orange-600]="activeTab() === 'login'"
+          [class.border-b-2]="activeTab() === 'login'"
+          [class.border-orange-600]="activeTab() === 'login'"
+          [class.text-slate-500]="activeTab() !== 'login'"
+          (click)="activeTab.set('login')"
+        >
+          Ingresar
+        </button>
+        <button
+          type="button"
+          class="flex-1 pb-3 text-sm font-medium transition-colors"
+          [class.text-orange-600]="activeTab() === 'register'"
+          [class.border-b-2]="activeTab() === 'register'"
+          [class.border-orange-600]="activeTab() === 'register'"
+          [class.text-slate-500]="activeTab() !== 'register'"
+          (click)="activeTab.set('register')"
+        >
+          Registro
+        </button>
+      </div>
+
+      @if (activeTab() === 'login') {
+        <form class="space-y-4" (ngSubmit)="submitLogin()">
+          <div>
+            <label class="fw-label" for="rut">RUT</label>
             <input
-              matInput
+              id="rut"
+              type="text"
+              class="fw-input"
+              [ngModel]="rut"
+              (ngModelChange)="onRutInput($event, 'login')"
+              name="rut"
+              autocomplete="username"
+              placeholder="21684679-6"
+              required
+            />
+          </div>
+          <div>
+            <label class="fw-label" for="password">Contraseña</label>
+            <input
+              id="password"
               type="password"
-              name="password"
+              class="fw-input"
               [(ngModel)]="password"
+              name="password"
               autocomplete="current-password"
               required
             />
-            <mat-icon matSuffix>lock</mat-icon>
-          </mat-form-field>
-          <button
-            mat-flat-button
-            color="primary"
-            type="submit"
-            class="w-full !py-6 fw-btn-shimmer !bg-gradient-to-r !from-orange-600 !to-rose-600 !text-white font-semibold tracking-wide"
-            [disabled]="auth.loading()"
-          >
+          </div>
+          <button type="button" class="text-sm text-orange-600 hover:text-orange-700 font-medium" (click)="openForgotPassword()">
+            Olvidé mi contraseña
+          </button>
+          <button type="submit" class="fw-btn-primary w-full" [disabled]="auth.loading()">
             @if (auth.loading()) {
-              <span class="inline-flex items-center gap-2">
-                <mat-icon class="animate-spin">progress_activity</mat-icon>
-                Conectando…
-              </span>
+              Conectando…
             } @else {
               Entrar al panel
             }
           </button>
         </form>
-      </mat-tab>
-      <mat-tab label="Registro">
-        <form class="mt-5 space-y-3" (ngSubmit)="submitRegister()">
-          <mat-form-field appearance="outline" class="w-full" subscriptSizing="dynamic" color="accent">
-            <mat-label>RUT</mat-label>
-            <input matInput name="rrut" [(ngModel)]="regRut" required />
-          </mat-form-field>
-          <mat-form-field appearance="outline" class="w-full" subscriptSizing="dynamic" color="accent">
-            <mat-label>Email</mat-label>
-            <input matInput type="email" name="remail" [(ngModel)]="regEmail" required />
-          </mat-form-field>
-          <mat-form-field appearance="outline" class="w-full" subscriptSizing="dynamic" color="accent">
-            <mat-label>Nombre (opcional)</mat-label>
-            <input matInput name="rnom" [(ngModel)]="regNombre" />
-          </mat-form-field>
-          <mat-form-field appearance="outline" class="w-full" subscriptSizing="dynamic" color="accent">
-            <mat-label>Contraseña (mín. 6)</mat-label>
-            <input matInput type="password" name="rpass" [(ngModel)]="regPassword" required minlength="6" />
-          </mat-form-field>
-          <button
-            mat-stroked-button
-            type="submit"
-            class="w-full !py-6 fw-btn-shimmer !border-orange-400/50 !text-orange-100"
-            [disabled]="auth.loading()"
-          >
+      } @else {
+        <form class="space-y-4" (ngSubmit)="submitRegister()">
+          <div>
+            <label class="fw-label" for="regRut">RUT</label>
+            <input
+              id="regRut"
+              type="text"
+              class="fw-input"
+              [ngModel]="regRut"
+              (ngModelChange)="onRutInput($event, 'register')"
+              name="regRut"
+              placeholder="21684679-6"
+              required
+            />
+          </div>
+          <div>
+            <label class="fw-label" for="regEmail">Email</label>
+            <input
+              id="regEmail"
+              type="email"
+              class="fw-input"
+              [(ngModel)]="regEmail"
+              name="regEmail"
+              required
+            />
+          </div>
+          <div>
+            <label class="fw-label" for="regNombre">Nombre (opcional)</label>
+            <input id="regNombre" type="text" class="fw-input" [(ngModel)]="regNombre" name="regNombre" />
+          </div>
+          <div>
+            <label class="fw-label" for="regPassword">Contraseña (mín. 6)</label>
+            <input
+              id="regPassword"
+              type="password"
+              class="fw-input"
+              [(ngModel)]="regPassword"
+              name="regPassword"
+              required
+              minlength="6"
+            />
+          </div>
+          <button type="submit" class="fw-btn-secondary w-full" [disabled]="auth.loading()">
             Crear cuenta e iniciar sesión
           </button>
         </form>
-      </mat-tab>
-    </mat-tab-group>
+      }
+    }
   </section>
 
-  <footer class="mt-12 text-center text-[11px] text-zinc-600 max-w-md">
-    MVP frontend · MVVM · Tailwind · Angular Material · Leaflet · Compatible con API Gateway
-    <code class="block mt-1 text-zinc-500">/api/usuarios · /api/reports · /api/geolocation</code>
+  <footer class="mt-10 text-center text-xs text-slate-500">
+    Proyecto Firewall · Angular · Spring Boot
   </footer>
 </main>
