@@ -234,9 +234,14 @@ MYSQL_ALERTS_PASSWORD=alerts_pass
 MYSQL_REPORTS_PASSWORD=reports_pass
 MYSQL_GEOLOCATION_PASSWORD=geo_pass
 MYSQL_USUARIOS_PASSWORD=usuarios_pass
+
+# Necesario para recuperar contrasenas por correo (Gmail)
+MAIL_USERNAME=tu_correo@gmail.com
+MAIL_APP_PASSWORD=tu_contrasena_de_aplicacion
 ```
 
 > **Nota:** Si no creas el archivo `.env`, se usarán los valores por defecto definidos en el `docker-compose.yml`.
+> La recuperacion de contrasena requiere `MAIL_USERNAME` y `MAIL_APP_PASSWORD`; sin esas variables el endpoint devuelve un error de configuracion y no cambia la clave del usuario.
 
 ---
 

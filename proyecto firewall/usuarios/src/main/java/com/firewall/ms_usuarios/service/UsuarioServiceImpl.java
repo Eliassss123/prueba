@@ -65,12 +65,16 @@ public class UsuarioServiceImpl implements UsuarioService {
             throw new IllegalArgumentException("El correo electrónico es obligatorio");
         }
         usuarioRepository.findByEmailIgnoreCase(normalized).ifPresent(usuario -> {
+            emailService.validateConfigured();
             String temporary = generateTemporaryPassword();
+            String previousPasswordHash = usuario.getPasswordHash();
             usuario.setPasswordHash(passwordEncoder.encode(temporary));
             usuarioRepository.save(usuario);
             try {
                 emailService.sendTemporaryPassword(usuario.getEmail(), usuario.getNombre(), usuario.getRut(), temporary);
             } catch (MessagingException ex) {
+                usuario.setPasswordHash(previousPasswordHash);
+                usuarioRepository.save(usuario);
                 throw new IllegalStateException("No se pudo enviar el correo de recuperación", ex);
             }
         });

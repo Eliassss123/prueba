@@ -13,14 +13,27 @@ public class EmailService {
 
     private final JavaMailSender mailSender;
     private final String fromAddress;
+    private final String password;
 
-    public EmailService(JavaMailSender mailSender, @Value("${spring.mail.username:}") String fromAddress) {
+    public EmailService(
+            JavaMailSender mailSender,
+            @Value("${spring.mail.username:}") String fromAddress,
+            @Value("${spring.mail.password:}") String password) {
         this.mailSender = mailSender;
         this.fromAddress = fromAddress;
+        this.password = password;
+    }
+
+    public void validateConfigured() {
+        if (fromAddress == null || fromAddress.isBlank() || password == null || password.isBlank()) {
+            throw new IllegalStateException(
+                    "El correo de recuperacion no esta configurado. Defina MAIL_USERNAME y MAIL_APP_PASSWORD.");
+        }
     }
 
     public void sendTemporaryPassword(String toEmail, String nombre, String rut, String temporaryPassword)
             throws MessagingException {
+        validateConfigured();
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
         helper.setFrom(fromAddress);
