@@ -44,11 +44,11 @@ class UsuarioServiceImplTest {
     void recoverPasswordByEmail_debeActualizarPasswordYEnviarCorreo() throws Exception {
         Usuario usuario = usuarioRegistrado();
         when(usuarioRepository.findByEmailIgnoreCase("juan@example.com")).thenReturn(Optional.of(usuario));
+        when(emailService.isConfigured()).thenReturn(true);
 
         usuarioService.recoverPasswordByEmail(" Juan@Example.com ");
 
         ArgumentCaptor<String> temporaryPassword = ArgumentCaptor.forClass(String.class);
-        verify(emailService).validateConfigured();
         verify(emailService).sendTemporaryPassword(
                 eq("juan@example.com"),
                 eq("Juan Perez"),
@@ -64,15 +64,30 @@ class UsuarioServiceImplTest {
         Usuario usuario = usuarioRegistrado();
         String previousPasswordHash = usuario.getPasswordHash();
         when(usuarioRepository.findByEmailIgnoreCase("juan@example.com")).thenReturn(Optional.of(usuario));
+        when(emailService.isConfigured()).thenReturn(true);
         doThrow(new MessagingException("smtp error"))
                 .when(emailService)
                 .sendTemporaryPassword(eq("juan@example.com"), eq("Juan Perez"), eq("12.345.678-9"), anyString());
 
         assertThrows(IllegalStateException.class, () -> usuarioService.recoverPasswordByEmail("juan@example.com"));
 
-        verify(emailService).validateConfigured();
         verify(usuarioRepository, times(2)).save(usuario);
         assertEquals(previousPasswordHash, usuario.getPasswordHash());
+    }
+
+    @Test
+    void recoverPasswordByEmail_debeRetornarPasswordTemporalEnModoDemoSiNoHayCorreoConfigurado() {
+        Usuario usuario = usuarioRegistrado();
+        when(usuarioRepository.findByEmailIgnoreCase("juan@example.com")).thenReturn(Optional.of(usuario));
+        when(emailService.isConfigured()).thenReturn(false);
+
+        String message = usuarioService.recoverPasswordByEmail("juan@example.com");
+
+        assertTrue(message.startsWith("Modo demo: correo no configurado. Contrasena provisional: "));
+        String temporary = message.substring(message.lastIndexOf(": ") + 2);
+        assertEquals(12, temporary.length());
+        assertTrue(new BCryptPasswordEncoder().matches(temporary, usuario.getPasswordHash()));
+        verify(usuarioRepository).save(usuario);
     }
 
     @Test

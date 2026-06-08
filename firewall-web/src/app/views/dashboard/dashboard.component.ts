@@ -13,7 +13,7 @@ import { LayoutViewModel } from '../../viewmodels/layout.viewmodel';
 const PAGE_TITLES: Record<string, string> = {
   '/app/inicio': 'Inicio',
   '/app/mapa': 'Reportes y emergencias',
-  '/app/suministros': 'Suministros médicos',
+  '/app/suministros': 'Recursos utiles',
   '/app/alertas': 'Alertas críticas',
   '/app/perfil': 'Mi perfil',
   '/app/reporte': 'Nuevo reporte',

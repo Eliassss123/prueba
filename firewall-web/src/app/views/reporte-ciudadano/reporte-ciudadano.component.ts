@@ -28,6 +28,12 @@ export class ReporteCiudadanoComponent implements AfterViewInit {
   referencia = '';
   archivoNombre = '';
 
+  private readonly fallbackFix = {
+    lat: -33.45,
+    lng: -70.67,
+    accuracyM: 0,
+  };
+
   ngAfterViewInit(): void {
     queueMicrotask(() => this.solicitarUbicacion(false));
   }
@@ -45,12 +51,21 @@ export class ReporteCiudadanoComponent implements AfterViewInit {
         }
       },
       error: () => {
+        this.aplicarUbicacionDemo();
         const msg = this.geo.error();
         if (msg) {
-          this.snack.open(msg, 'OK', { duration: 7000 });
+          this.snack.open(`${msg} Se aplico una ubicacion de ejemplo.`, 'OK', { duration: 7000 });
         }
       },
     });
+  }
+
+  aplicarUbicacionDemo(): void {
+    this.latitud = this.fallbackFix.lat.toFixed(7);
+    this.longitud = this.fallbackFix.lng.toFixed(7);
+    if (!this.referencia.trim()) {
+      this.referencia = 'Ubicacion de ejemplo para pruebas';
+    }
   }
 
   onFile(ev: Event): void {

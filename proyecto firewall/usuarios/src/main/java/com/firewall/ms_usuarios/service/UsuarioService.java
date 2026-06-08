@@ -9,6 +9,6 @@ public interface UsuarioService {
     Usuario register(RegisterRequestDTO request);
     Usuario login(LoginRequestDTO request);
     Usuario findByRut(String rut);
-    void recoverPasswordByEmail(String email);
+    String recoverPasswordByEmail(String email);
     void changePassword(ChangePasswordRequestDTO request);
 }

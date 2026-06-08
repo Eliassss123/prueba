@@ -38,10 +38,8 @@ public class UsuarioController {
 
     @PostMapping("/forgot-password")
     public ResponseEntity<Map<String, String>> forgotPassword(@RequestParam String email) {
-        usuarioService.recoverPasswordByEmail(email);
-        return ResponseEntity.ok(Collections.singletonMap(
-                "message",
-                "Si el correo está registrado, recibirá en breve una contraseña provisional."));
+        String message = usuarioService.recoverPasswordByEmail(email);
+        return ResponseEntity.ok(Collections.singletonMap("message", message));
     }
 
     @PostMapping("/login")

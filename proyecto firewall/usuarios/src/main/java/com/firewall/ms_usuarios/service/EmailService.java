@@ -25,10 +25,14 @@ public class EmailService {
     }
 
     public void validateConfigured() {
-        if (fromAddress == null || fromAddress.isBlank() || password == null || password.isBlank()) {
+        if (!isConfigured()) {
             throw new IllegalStateException(
                     "El correo de recuperacion no esta configurado. Defina MAIL_USERNAME y MAIL_APP_PASSWORD.");
         }
+    }
+
+    public boolean isConfigured() {
+        return fromAddress != null && !fromAddress.isBlank() && password != null && !password.isBlank();
     }
 
     public void sendTemporaryPassword(String toEmail, String nombre, String rut, String temporaryPassword)

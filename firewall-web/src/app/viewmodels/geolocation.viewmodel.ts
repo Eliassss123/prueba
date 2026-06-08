@@ -54,9 +54,9 @@ export class GeolocationViewModel {
           sub.error(err);
         },
         {
-          enableHighAccuracy: true,
-          timeout: 25_000,
-          maximumAge: 0,
+          enableHighAccuracy: false,
+          timeout: 8_000,
+          maximumAge: 120_000,
         },
       );
     });

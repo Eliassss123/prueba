@@ -21,10 +21,10 @@ public class AuthController {
 
     @PostMapping("/forgot-password")
     public ResponseEntity<Map<String, String>> forgotPassword(@RequestParam String email) {
-        usuarioService.recoverPasswordByEmail(email);
+        String message = usuarioService.recoverPasswordByEmail(email);
         return ResponseEntity.ok(Collections.singletonMap(
                 "message",
-                "Si el correo está registrado, recibirá en breve una contraseña provisional."));
+                message));
     }
 
     @ExceptionHandler(IllegalArgumentException.class)

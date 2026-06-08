@@ -59,17 +59,19 @@ public class UsuarioServiceImpl implements UsuarioService {
     }
 
     @Override
-    public void recoverPasswordByEmail(String email) {
+    public String recoverPasswordByEmail(String email) {
         String normalized = email == null ? "" : email.toLowerCase().trim();
         if (normalized.isBlank()) {
             throw new IllegalArgumentException("El correo electrónico es obligatorio");
         }
-        usuarioRepository.findByEmailIgnoreCase(normalized).ifPresent(usuario -> {
-            emailService.validateConfigured();
+        return usuarioRepository.findByEmailIgnoreCase(normalized).map(usuario -> {
             String temporary = generateTemporaryPassword();
             String previousPasswordHash = usuario.getPasswordHash();
             usuario.setPasswordHash(passwordEncoder.encode(temporary));
             usuarioRepository.save(usuario);
+            if (!emailService.isConfigured()) {
+                return "Modo demo: correo no configurado. Contrasena provisional: " + temporary;
+            }
             try {
                 emailService.sendTemporaryPassword(usuario.getEmail(), usuario.getNombre(), usuario.getRut(), temporary);
             } catch (MessagingException ex) {
@@ -77,7 +79,8 @@ public class UsuarioServiceImpl implements UsuarioService {
                 usuarioRepository.save(usuario);
                 throw new IllegalStateException("No se pudo enviar el correo de recuperación", ex);
             }
-        });
+            return "Si el correo esta registrado, recibira en breve una contrasena provisional.";
+        }).orElse("Si el correo esta registrado, recibira en breve una contrasena provisional.");
     }
 
     @Override

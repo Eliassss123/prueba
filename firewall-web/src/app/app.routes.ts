@@ -30,10 +30,10 @@ export const routes: Routes = [
       {
         path: 'suministros',
         loadComponent: () =>
-          import('./views/placeholder-panel/placeholder-panel.component').then((m) => m.PlaceholderPanelComponent),
+          import('./views/medical-resources/medical-resources.component').then((m) => m.MedicalResourcesComponent),
         data: {
-          title: 'Monitoreo de Suministros Médicos',
-          description: 'Visualización de stock, pedidos urgentes y centros de distribución.',
+          title: 'Recursos utiles cercanos',
+          description: 'Farmacias y supermercados alrededor de la ubicacion compartida.',
           icon: 'medical_services',
         },
       },

@@ -7,7 +7,7 @@
       <div>
         <h2 class="font-display text-lg font-bold text-slate-900">Reporte ciudadano</h2>
         <p class="text-sm text-slate-600 mt-0.5">
-          Se solicita ubicación al entrar. El reporte usa las coordenadas GPS del dispositivo.
+          Puede usar GPS del navegador o una ubicacion de ejemplo para pruebas.
         </p>
       </div>
     </div>
@@ -18,7 +18,7 @@
       <div class="flex-1 min-w-0">
         <p class="text-sm text-slate-800 font-medium">Ubicación del equipo</p>
         <p class="text-xs text-slate-500 mt-0.5">
-          Permita el acceso en el navegador. En <code class="text-slate-600">localhost</code> o HTTPS funciona mejor.
+          Si el GPS no responde, use la ubicacion de ejemplo.
         </p>
         @if (geo.status() === 'pending') {
           <div class="flex items-center gap-2 mt-2 text-orange-600 text-sm">
@@ -36,14 +36,19 @@
           <p class="text-xs text-red-600 mt-2">{{ geo.error() }}</p>
         }
       </div>
-      <button
-        type="button"
-        class="fw-btn-secondary shrink-0 text-sm"
-        (click)="solicitarUbicacion(true)"
-        [disabled]="geo.status() === 'pending'"
-      >
-        Actualizar GPS
-      </button>
+      <div class="flex shrink-0 flex-col gap-2 sm:w-auto">
+        <button
+          type="button"
+          class="fw-btn-secondary text-sm"
+          (click)="solicitarUbicacion(true)"
+          [disabled]="geo.status() === 'pending'"
+        >
+          Actualizar GPS
+        </button>
+        <button type="button" class="fw-btn-secondary text-sm" (click)="aplicarUbicacionDemo()">
+          Usar ejemplo
+        </button>
+      </div>
     </div>
 
     <div>
