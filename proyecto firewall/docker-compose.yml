@@ -116,8 +116,8 @@ services:
       SPRING_PROFILES_ACTIVE: docker
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka:8761/eureka/
       MYSQL_USUARIOS_PASSWORD: ${MYSQL_USUARIOS_PASSWORD:-usuarios_pass}
-      MAIL_USERNAME: ${MAIL_USERNAME:-}
-      MAIL_APP_PASSWORD: ${MAIL_APP_PASSWORD:-}
+      MAIL_USERNAME: alvarezbastian003@gmail.com
+      MAIL_APP_PASSWORD: msvltyoysjvgeoxh
     depends_on:
       eureka:
         condition: service_started
