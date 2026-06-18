@@ -1,28 +1,132 @@
 <section class="bg-white rounded-xl shadow-md overflow-hidden">
-  <div class="p-5 border-b border-slate-100">
-    <div class="flex flex-wrap items-start gap-3">
-      <span class="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-50 text-emerald-700">
-        <mat-icon>medical_services</mat-icon>
-      </span>
-      <div class="min-w-0">
-        <h2 class="font-display text-lg font-bold text-slate-900">Recursos utiles cercanos</h2>
-        <p class="text-sm text-slate-600 mt-0.5">Farmacias y supermercados de ejemplo para referencia visual</p>
+  <div class="p-4 sm:p-5 border-b border-slate-100">
+    <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+      <div class="flex items-start gap-3 min-w-0">
+        <span class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-emerald-50 text-emerald-700">
+          <mat-icon>medical_services</mat-icon>
+        </span>
+        <div class="min-w-0">
+          <h2 class="font-display text-lg font-bold text-slate-900">Recursos utiles cercanos</h2>
+          <p class="text-sm text-slate-600 mt-0.5">Búsqueda en tiempo real de farmacias y supermercados cercanos.</p>
+          <p class="text-xs text-slate-500 mt-2">{{ userLocationLabel() }}</p>
+          @if (lastUpdated()) {
+            <p class="text-[11px] text-slate-500 mt-1">Actualizado: {{ lastUpdated() | date: 'dd/MM/yyyy HH:mm:ss' }}</p>
+          }
+        </div>
+      </div>
+
+      <div class="flex w-full sm:w-auto gap-2">
+        <button type="button" class="fw-btn-secondary !px-3 text-sm flex-1 sm:flex-none" (click)="refresh()" [disabled]="loading()">
+          <mat-icon class="!text-base mr-1">refresh</mat-icon>
+          Actualizar
+        </button>
+        <button
+          type="button"
+          class="fw-btn-secondary !px-3 text-sm flex-1 sm:flex-none"
+          (click)="focusUserLocation()"
+          [disabled]="!userPosition()"
+        >
+          <mat-icon class="!text-base mr-1">my_location</mat-icon>
+          Mi ubicación
+        </button>
       </div>
     </div>
   </div>
 
-  <div class="p-5">
-    <div class="flex flex-wrap items-center gap-2 mb-3">
-      <button type="button" class="fw-btn-secondary text-sm" (click)="refresh()">
-        <mat-icon class="!text-base align-middle mr-1">refresh</mat-icon>
-        Reordenar ejemplos
-      </button>
-      <span class="text-xs text-slate-500 ml-auto">{{ resources().length }} lugares</span>
+  <div class="p-4 sm:p-5 space-y-4">
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-2">
+      <article class="fw-resource-kpi">
+        <p class="fw-resource-kpi-label">Visibles</p>
+        <p class="fw-resource-kpi-value">{{ visibleCount() }}</p>
+      </article>
+      <article class="fw-resource-kpi">
+        <p class="fw-resource-kpi-label">Farmacias</p>
+        <p class="fw-resource-kpi-value">{{ totalFarmacias() }}</p>
+      </article>
+      <article class="fw-resource-kpi">
+        <p class="fw-resource-kpi-label">Supermercados</p>
+        <p class="fw-resource-kpi-value">{{ totalSupermercados() }}</p>
+      </article>
+      <article class="fw-resource-kpi">
+        <p class="fw-resource-kpi-label">Más cercano</p>
+        <p class="fw-resource-kpi-value text-base">{{ nearestResource() ? distanceLabel(nearestResource()!.distanceKm) : 'N/D' }}</p>
+      </article>
     </div>
 
-    <div #mapHost class="fw-resource-map rounded-xl overflow-hidden border border-slate-200 shadow-sm"></div>
+    <section class="rounded-xl border border-slate-200 bg-slate-50 p-3 space-y-3">
+      <div class="flex flex-wrap items-center gap-2">
+        <span class="text-xs font-medium text-slate-700">Radio:</span>
+        @for (km of [3, 6, 10]; track km) {
+          <button
+            type="button"
+            class="fw-chip-btn"
+            [ngClass]="radiusKm() === km ? 'fw-chip-btn-active' : ''"
+            (click)="setRadius(km)"
+          >
+            {{ km }} km
+          </button>
+        }
+        <button type="button" class="fw-chip-btn ml-auto" (click)="clearFilters()">Limpiar filtros</button>
+      </div>
 
-    <div class="mt-3 flex flex-wrap gap-2 text-xs text-slate-600">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-2">
+        <input
+          type="text"
+          class="fw-input"
+          [ngModel]="searchText()"
+          (ngModelChange)="setSearchText($event)"
+          placeholder="Buscar por nombre o dirección"
+        />
+        <select class="fw-input" [ngModel]="sortMode()" (ngModelChange)="setSortMode($event)">
+          <option value="distance">Ordenar por cercanía</option>
+          <option value="name">Ordenar por nombre</option>
+        </select>
+        <div class="flex flex-wrap gap-2">
+          <button
+            type="button"
+            class="fw-chip-btn"
+            [ngClass]="selectedType() === 'all' ? 'fw-chip-btn-active' : ''"
+            (click)="setTypeFilter('all')"
+          >
+            Todos
+          </button>
+          <button
+            type="button"
+            class="fw-chip-btn"
+            [ngClass]="selectedType() === 'pharmacy' ? 'fw-chip-btn-active' : ''"
+            (click)="setTypeFilter('pharmacy')"
+          >
+            Farmacias
+          </button>
+          <button
+            type="button"
+            class="fw-chip-btn"
+            [ngClass]="selectedType() === 'supermarket' ? 'fw-chip-btn-active' : ''"
+            (click)="setTypeFilter('supermarket')"
+          >
+            Supermercados
+          </button>
+        </div>
+      </div>
+    </section>
+
+    @if (error()) {
+      <section class="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
+        {{ error() }}
+      </section>
+    }
+
+    <div class="fw-resource-map-wrapper">
+      <div #mapHost class="fw-resource-map rounded-xl overflow-hidden border border-slate-200 shadow-sm"></div>
+      @if (loading()) {
+        <div class="fw-resource-loading">
+          <mat-spinner diameter="24"></mat-spinner>
+          Cargando recursos...
+        </div>
+      }
+    </div>
+
+    <div class="mt-1 flex flex-wrap gap-2 text-xs text-slate-600">
       <span class="inline-flex items-center gap-1">
         <span class="fw-legend-dot bg-emerald-600"></span>
         Farmacias
@@ -31,6 +135,42 @@
         <span class="fw-legend-dot bg-amber-500"></span>
         Supermercados
       </span>
+      <span class="inline-flex items-center gap-1">
+        <span class="fw-legend-dot bg-blue-500"></span>
+        Tu ubicación
+      </span>
+      <span class="ml-auto text-[11px] text-slate-500">{{ visibleCount() }} resultados visibles</span>
     </div>
+
+    @if (filteredResources().length > 0) {
+      <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3">
+        @for (resource of filteredResources(); track resource.id) {
+          <article class="fw-resource-card">
+            <div class="flex items-start justify-between gap-3">
+              <div class="min-w-0">
+                <h3 class="text-sm font-semibold text-slate-900 break-words">{{ resource.name }}</h3>
+                <p class="text-xs text-slate-500 mt-1">{{ distanceLabel(resource.distanceKm) }} desde tu posición</p>
+              </div>
+              <span class="fw-resource-pill" [ngClass]="resourceTypeClass(resource.type)">
+                {{ resourceTypeLabel(resource.type) }}
+              </span>
+            </div>
+            <p class="text-sm text-slate-600 mt-3 break-words">{{ resource.address }}</p>
+            <div class="mt-4 flex flex-wrap gap-2">
+              <button type="button" class="fw-btn-secondary text-xs !px-3 !py-2" (click)="focusResource(resource)">
+                Ver en mapa
+              </button>
+              <button type="button" class="fw-btn-primary text-xs !px-3 !py-2" (click)="openInGoogleMaps(resource)">
+                Abrir ruta
+              </button>
+            </div>
+          </article>
+        }
+      </div>
+    } @else if (!loading()) {
+      <div class="rounded-xl border border-slate-200 bg-slate-50 px-4 py-6 text-center text-sm text-slate-600">
+        No hay resultados con los filtros actuales. Ajusta búsqueda o radio.
+      </div>
+    }
   </div>
 </section>

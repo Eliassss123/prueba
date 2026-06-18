@@ -1,7 +1,55 @@
+:host {
+  display: block;
+}
+
+.fw-resource-map-wrapper {
+  position: relative;
+}
+
 .fw-resource-map {
-  height: min(70vh, 640px);
-  min-height: 340px;
+  height: min(62vh, 560px);
+  min-height: 280px;
   background: #f8fafc;
+}
+
+.fw-resource-loading {
+  @apply absolute inset-0 z-[450] flex items-center justify-center gap-2 rounded-xl bg-white/75 text-sm font-medium text-slate-700;
+}
+
+.fw-resource-kpi {
+  @apply rounded-xl border border-slate-200 bg-slate-50 p-3;
+}
+
+.fw-resource-kpi-label {
+  @apply text-[11px] uppercase tracking-wide text-slate-500;
+}
+
+.fw-resource-kpi-value {
+  @apply mt-1 text-xl font-semibold text-slate-900;
+}
+
+.fw-chip-btn {
+  @apply inline-flex items-center rounded-full border border-slate-300 bg-white px-3 py-1.5 text-xs text-slate-700 transition-colors hover:bg-slate-100;
+}
+
+.fw-chip-btn-active {
+  @apply border-emerald-200 bg-emerald-50 text-emerald-700;
+}
+
+.fw-resource-card {
+  @apply rounded-xl border border-slate-200 bg-white p-4 shadow-sm;
+}
+
+.fw-resource-pill {
+  @apply inline-flex shrink-0 items-center rounded-full px-2.5 py-1 text-[11px] font-semibold;
+}
+
+.fw-resource-pill-pharmacy {
+  @apply bg-emerald-50 text-emerald-700 ring-1 ring-emerald-100;
+}
+
+.fw-resource-pill-market {
+  @apply bg-amber-50 text-amber-700 ring-1 ring-amber-100;
 }
 
 .fw-legend-dot {
@@ -39,4 +87,11 @@
 
 ::ng-deep .fw-resource-pin-market {
   background: #f59e0b;
+}
+
+@media (max-width: 640px) {
+  .fw-resource-map {
+    height: 46vh;
+    min-height: 240px;
+  }
 }

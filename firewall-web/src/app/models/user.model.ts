@@ -1,3 +1,4 @@
+export type UserRole = 'admin' | 'operator';
 /** Contrato con `LoginRequestDTO` / `RegisterRequestDTO` (ms-usuarios). */
 export interface LoginRequest {
   rut: string;
@@ -17,6 +18,8 @@ export interface LoginResponse {
   nombre: string;
   mensaje: string;
   authenticated: boolean;
+  role?: string;
+  categoria?: string;
 }
 
 export interface UsuarioResponse {
@@ -29,6 +32,7 @@ export interface UsuarioResponse {
 export interface Session {
   rut: string;
   nombre: string;
+  role: UserRole;
 }
 
 export interface ChangePasswordRequest {

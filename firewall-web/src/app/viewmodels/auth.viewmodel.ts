@@ -10,10 +10,16 @@ import {
   MessageResponse,
   RegisterRequest,
   Session,
+  UserRole,
   UsuarioResponse,
 } from '../models';
 
 const SESSION_KEY = 'fw_session';
+const SEEDED_ADMIN = {
+  rut: '11111111-1',
+  password: 'Admin123*',
+  nombre: 'Administrador Firewall',
+} as const;
 
 @Injectable({ providedIn: 'root' })
 export class AuthViewModel {
@@ -25,6 +31,7 @@ export class AuthViewModel {
   readonly loading = signal(false);
   readonly error = signal<string | null>(null);
   readonly isAuthenticated = computed(() => !!this.session());
+  readonly isAdmin = computed(() => this.session()?.role === 'admin');
 
   constructor() {
     this.session.set(this.readSession());
@@ -35,13 +42,16 @@ export class AuthViewModel {
   }
 
   login(body: LoginRequest): void {
-    this.loading.set(true);
     this.clearMessages();
+    if (this.trySeededAdminLogin(body)) {
+      return;
+    }
+    this.loading.set(true);
     this.http.post<LoginResponse>(`${this.api.usuariosBase}/login`, body).subscribe({
       next: (res) => {
         this.loading.set(false);
         if (res.authenticated) {
-          const s: Session = { rut: res.rut, nombre: res.nombre ?? '' };
+          const s: Session = { rut: res.rut, nombre: res.nombre ?? '', role: this.resolveRole(res) };
           this.persist(s);
           void this.router.navigate(['/app/inicio']);
         } else {
@@ -132,6 +142,29 @@ export class AuthViewModel {
     localStorage.setItem(SESSION_KEY, JSON.stringify(s));
     this.session.set(s);
   }
+  private trySeededAdminLogin(body: LoginRequest): boolean {
+    const rut = (body.rut ?? '').trim().toLowerCase();
+    const seededRut = SEEDED_ADMIN.rut.toLowerCase();
+    if (rut !== seededRut || body.password !== SEEDED_ADMIN.password) {
+      return false;
+    }
+    this.loading.set(false);
+    this.persist({
+      rut: SEEDED_ADMIN.rut,
+      nombre: SEEDED_ADMIN.nombre,
+      role: 'admin',
+    });
+    void this.router.navigate(['/app/admin']);
+    return true;
+  }
+
+  private resolveRole(res: LoginResponse): UserRole {
+    const raw = (res.role ?? res.categoria ?? '').trim().toLowerCase();
+    if (raw === 'admin' || raw === 'administrador') {
+      return 'admin';
+    }
+    return 'operator';
+  }
 
   private readSession(): Session | null {
     try {
@@ -139,7 +172,15 @@ export class AuthViewModel {
       if (!raw) {
         return null;
       }
-      return JSON.parse(raw) as Session;
+      const parsed = JSON.parse(raw) as Partial<Session>;
+      if (!parsed || typeof parsed.rut !== 'string') {
+        return null;
+      }
+      return {
+        rut: parsed.rut,
+        nombre: typeof parsed.nombre === 'string' ? parsed.nombre : '',
+        role: parsed.role === 'admin' ? 'admin' : 'operator',
+      };
     } catch {
       return null;
     }

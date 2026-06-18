@@ -11,6 +11,18 @@ export class LayoutViewModel {
     this.sidebarOpen.update((v) => !v);
   }
 
+  setSidebarOpen(isOpen: boolean): void {
+    this.sidebarOpen.set(isOpen);
+  }
+
+  openSidebar(): void {
+    this.sidebarOpen.set(true);
+  }
+
+  closeSidebar(): void {
+    this.sidebarOpen.set(false);
+  }
+
   setSection(s: OperatorSection): void {
     this.activeSection.set(s);
   }

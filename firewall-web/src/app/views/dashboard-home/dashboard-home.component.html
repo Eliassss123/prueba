@@ -35,6 +35,15 @@
       </h2>
       <p class="text-sm text-slate-600 mt-1">Umbrales, canales y reglas de notificación.</p>
     </a>
+    @if (auth.isAdmin()) {
+      <a routerLink="/app/admin" class="fw-card-interactive group">
+        <mat-icon class="text-orange-500 mb-3">admin_panel_settings</mat-icon>
+        <h2 class="font-semibold text-slate-900 group-hover:text-orange-600 transition-colors">
+          Centro de administración
+        </h2>
+        <p class="text-sm text-slate-600 mt-1">Métricas, actividad reciente y acceso a módulos críticos.</p>
+      </a>
+    }
 
     <a routerLink="/app/perfil" class="fw-card-interactive group">
       <mat-icon class="text-orange-500 mb-3">person</mat-icon>

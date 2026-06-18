@@ -1,0 +1,170 @@
+<div class="space-y-6">
+  <section class="rounded-xl border border-orange-100 bg-gradient-to-br from-orange-50 via-white to-slate-50 p-6 shadow-sm">
+    <div class="flex flex-wrap items-start gap-4">
+      <span class="inline-flex h-11 w-11 items-center justify-center rounded-lg bg-orange-100 text-orange-700">
+        <mat-icon>admin_panel_settings</mat-icon>
+      </span>
+      <div class="min-w-0 flex-1">
+        <h1 class="font-display text-2xl font-bold text-slate-900">Panel de administración operativo</h1>
+        <p class="text-sm text-slate-700 mt-1">
+          Vista central con métricas reales de reportes y monitoreo para decisiones rápidas.
+        </p>
+        <p class="text-xs text-slate-500 mt-2">
+          Última actualización:
+          @if (vm.lastUpdated()) {
+            <strong>{{ vm.lastUpdated() | date: 'dd/MM/yyyy HH:mm:ss' }}</strong>
+          } @else {
+            <strong>Sin datos</strong>
+          }
+        </p>
+      </div>
+      <div class="flex gap-2">
+        <button type="button" class="fw-btn-secondary" (click)="refresh()" [disabled]="vm.loading()">
+          <mat-icon class="!text-lg">refresh</mat-icon>
+          Actualizar
+        </button>
+        <a routerLink="/app/reporte" class="fw-btn-primary text-sm">
+          <mat-icon class="!text-base mr-1">add_location_alt</mat-icon>
+          Nuevo reporte
+        </a>
+      </div>
+    </div>
+  </section>
+
+  @if (vm.error()) {
+    <section class="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+      {{ vm.error() }}
+    </section>
+  }
+
+  <section class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
+    @for (kpi of vm.kpis(); track kpi.label) {
+      <article class="bg-white rounded-xl border border-slate-100 shadow-sm p-4">
+        <div class="flex items-start gap-3">
+          <span class="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-slate-100 text-slate-700">
+            <mat-icon>{{ kpi.icon }}</mat-icon>
+          </span>
+          <div class="min-w-0">
+            <p class="text-xs uppercase tracking-wide text-slate-500">{{ kpi.label }}</p>
+            <p class="text-2xl font-semibold text-slate-900 mt-1">{{ kpi.value }}</p>
+            <p class="text-xs text-slate-500 mt-1">{{ kpi.detail }}</p>
+          </div>
+        </div>
+      </article>
+    }
+  </section>
+
+  <section class="grid grid-cols-1 xl:grid-cols-5 gap-4">
+    <article class="xl:col-span-2 bg-white rounded-xl border border-slate-100 shadow-sm p-5 space-y-5">
+      <div>
+        <h2 class="font-display font-semibold text-slate-900">Estado de servicios</h2>
+        <p class="text-xs text-slate-500 mt-1">Disponibilidad de fuentes en tiempo real.</p>
+      </div>
+
+      <div class="space-y-3">
+        <div class="flex items-center justify-between gap-3 rounded-xl border border-slate-100 bg-slate-50 px-3 py-2.5">
+          <div>
+            <p class="text-sm font-semibold text-slate-800">ms-reportes</p>
+            <p class="text-[11px] text-slate-500">Endpoint `/api/reports`</p>
+          </div>
+          <span class="fw-admin-pill" [ngClass]="vm.reportesStatus() === 'ok' ? 'fw-admin-pill-active' : 'fw-admin-pill-high'">
+            {{ vm.reportesStatus() === 'ok' ? 'Operativo' : 'Error' }}
+          </span>
+        </div>
+        <div class="flex items-center justify-between gap-3 rounded-xl border border-slate-100 bg-slate-50 px-3 py-2.5">
+          <div>
+            <p class="text-sm font-semibold text-slate-800">ms-geolocalización</p>
+            <p class="text-[11px] text-slate-500">Endpoint `/api/geolocation`</p>
+          </div>
+          <span class="fw-admin-pill" [ngClass]="vm.geolocalizacionStatus() === 'ok' ? 'fw-admin-pill-active' : 'fw-admin-pill-high'">
+            {{ vm.geolocalizacionStatus() === 'ok' ? 'Operativo' : 'Error' }}
+          </span>
+        </div>
+      </div>
+
+      <div>
+        <h3 class="text-sm font-semibold text-slate-900 mb-2">Distribución por estado</h3>
+        <div class="flex flex-wrap gap-2">
+          @for (item of vm.estadosResumen(); track item.estado) {
+            <span class="fw-admin-pill fw-admin-pill-neutral">
+              {{ item.estado }}: {{ item.cantidad }}
+            </span>
+          } @empty {
+            <span class="text-xs text-slate-500">Sin estados disponibles.</span>
+          }
+        </div>
+      </div>
+    </article>
+
+    <article class="xl:col-span-3 bg-white rounded-xl border border-slate-100 shadow-sm">
+      <div class="px-5 py-4 border-b border-slate-100 space-y-3">
+        <div>
+          <h2 class="font-display font-semibold text-slate-900">Reportes recientes</h2>
+          <p class="text-xs text-slate-500 mt-1">Datos reales desde backend con filtros rápidos.</p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-2">
+          <input
+            type="text"
+            class="fw-input md:col-span-2"
+            [ngModel]="filtroTexto()"
+            (ngModelChange)="filtroTexto.set($event)"
+            placeholder="Buscar por ID, RUT o descripción"
+          />
+          <select
+            class="fw-input"
+            [ngModel]="filtroEstado()"
+            (ngModelChange)="filtroEstado.set($event)"
+          >
+            <option value="todos">Todos los estados</option>
+            @for (item of vm.estadosResumen(); track item.estado) {
+              <option [value]="item.estado.toLowerCase()">{{ item.estado }}</option>
+            }
+          </select>
+        </div>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="min-w-full text-sm">
+          <thead class="bg-slate-50">
+            <tr>
+              <th class="px-4 py-3 text-left text-[11px] uppercase tracking-wide text-slate-500 font-semibold">ID</th>
+              <th class="px-4 py-3 text-left text-[11px] uppercase tracking-wide text-slate-500 font-semibold">Fecha</th>
+              <th class="px-4 py-3 text-left text-[11px] uppercase tracking-wide text-slate-500 font-semibold">RUT</th>
+              <th class="px-4 py-3 text-left text-[11px] uppercase tracking-wide text-slate-500 font-semibold">Estado</th>
+              <th class="px-4 py-3 text-left text-[11px] uppercase tracking-wide text-slate-500 font-semibold">Descripción</th>
+              <th class="px-4 py-3 text-left text-[11px] uppercase tracking-wide text-slate-500 font-semibold">Ubicación</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-100">
+            @for (reporte of filteredReportes(); track reporte.id) {
+              <tr>
+                <td class="px-4 py-3 text-slate-700 align-top font-semibold text-slate-800">#{{ reporte.id }}</td>
+                <td class="px-4 py-3 text-slate-700 align-top">{{ reporte.fechaHora | date: 'dd/MM HH:mm' }}</td>
+                <td class="px-4 py-3 text-slate-700 align-top">{{ reporte.usuario.rut || 'N/A' }}</td>
+                <td class="px-4 py-3 text-slate-700 align-top">
+                  <span class="fw-admin-pill" [ngClass]="vm.severityClass(reporte.estado)">{{ reporte.estado || 'Sin estado' }}</span>
+                </td>
+                <td class="px-4 py-3 text-slate-700 align-top max-w-[320px]">
+                  <p class="truncate" [title]="reporte.descripcion">{{ reporte.descripcion }}</p>
+                </td>
+                <td class="px-4 py-3 text-slate-700 align-top">
+                  {{ reporte.ubicacion.latitud || '-' }}, {{ reporte.ubicacion.longitud || '-' }}
+                </td>
+              </tr>
+            } @empty {
+              <tr>
+                <td colspan="6" class="px-4 py-8 text-center text-slate-500">
+                  @if (vm.loading()) {
+                    Cargando reportes...
+                  } @else {
+                    No hay reportes que coincidan con el filtro.
+                  }
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </article>
+  </section>
+</div>

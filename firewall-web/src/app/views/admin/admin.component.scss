@@ -1,0 +1,24 @@
+.fw-admin-pill {
+  @apply inline-flex items-center rounded-full px-2 py-1 text-[11px] font-medium;
+}
+
+.fw-admin-pill-active {
+  @apply bg-emerald-50 text-emerald-700 ring-1 ring-emerald-100;
+}
+
+
+.fw-admin-pill-high {
+  @apply bg-rose-50 text-rose-700 ring-1 ring-rose-100;
+}
+
+.fw-admin-pill-medium {
+  @apply bg-amber-50 text-amber-700 ring-1 ring-amber-100;
+}
+
+.fw-admin-pill-low {
+  @apply bg-sky-50 text-sky-700 ring-1 ring-sky-100;
+}
+
+.fw-admin-pill-neutral {
+  @apply bg-slate-100 text-slate-700 ring-1 ring-slate-200;
+}

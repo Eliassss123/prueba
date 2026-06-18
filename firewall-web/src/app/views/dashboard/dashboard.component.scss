@@ -64,3 +64,19 @@ mat-sidenav-content {
 ::ng-deep mat-toolbar::after {
   display: none !important;
 }
+
+@media (max-width: 1023px) {
+  .fw-sidebar {
+    width: min(88vw, 320px) !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .fw-nav-link {
+    @apply gap-2.5 px-2.5 py-2.5;
+  }
+
+  .fw-nav-desc {
+    @apply hidden;
+  }
+}

@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './core/auth.guard';
+import { adminGuard } from './core/admin.guard';
 
 export const routes: Routes = [
   {
@@ -46,6 +47,11 @@ export const routes: Routes = [
           description: 'Defina reglas, severidad y destinatarios de notificaciones automáticas.',
           icon: 'notifications_active',
         },
+      },
+      {
+        path: 'admin',
+        loadComponent: () => import('./views/admin/admin.component').then((m) => m.AdminComponent),
+        canActivate: [adminGuard],
       },
       {
         path: 'perfil',
